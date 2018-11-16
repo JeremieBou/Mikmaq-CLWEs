@@ -41,20 +41,6 @@ parser.add_argument('--cuda', action='store_true',
                     help='use CUDA')
 parser.add_argument('--log-interval', type=int, default=200, metavar='N',
                     help='report interval')
-
-parser.add_argument('--hin_weights', type=str, default="default_uniform",
-                    help='hidden layer input weights')
-parser.add_argument('--hr_weights', type=str, default="default_uniform",
-                    help='hidden layer recurent weights')
-parser.add_argument('--hin_bias', type=str, default="zeroes",
-                    help='hidden layer input bias')
-parser.add_argument('--hr_bias', type=str, default="zeroes",
-                    help='hidden layer recurent bias')
-parser.add_argument('--em_weights', type=str, default="fixed_uniform",
-                    help='embedding layer weights')
-parser.add_argument('--out_weights', type=str, default="fixed_uniform",
-                    help='decode layer weights')
-
 parser.add_argument('--save', type=str, default='model.pt',
                     help='path to save the final model')
 parser.add_argument('--onnx-export', type=str, default='',
@@ -106,21 +92,7 @@ test_data = batchify(corpus.test, eval_batch_size)
 ###############################################################################
 
 ntokens = len(corpus.dictionary)
-model = model.RNNModel(args.model,
-                        ntokens,
-                        args.emsize,
-                        args.nhid,
-                        args.nlayers,
-                        args.dropout,
-                        args.tied,
-                        init_method=[
-                            args.hin_weights,
-                            args.hr_weights,
-                            args.hin_bias,
-                            args.hr_bias,
-                            args.em_weights,
-                            args.out_weights
-                        ]).to(device)
+model = model.RNNModel(args.model, ntokens, args.emsize, args.nhid, args.nlayers, args.dropout, args.tied).to(device)
 
 criterion = nn.CrossEntropyLoss()
 
