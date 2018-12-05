@@ -184,6 +184,7 @@ def train():
         model.zero_grad()
         output, hidden = model(data, hidden)
         loss = criterion(output.view(-1, ntokens), targets)
+
         loss.backward()
 
         # `clip_grad_norm` helps prevent the exploding gradient problem in RNNs / LSTMs.
@@ -199,7 +200,7 @@ def train():
             print('| epoch {:3d} | {:5d}/{:5d} batches | lr {:02.2f} | ms/batch {:5.2f} | '
                     'loss {:5.2f} | ppl {:8.2f}'.format(
                 epoch, batch, len(train_data) // args.bptt, lr,
-                elapsed * 1000 / args.log_interval, cur_loss, math.exp(cur_loss)))
+                elapsed * 1000 / args.log_interval, cur_loss, 2**(cur_loss)))
             total_loss = 0
             start_time = time.time()
 
@@ -226,7 +227,7 @@ try:
         print('-' * 89)
         print('| end of epoch {:3d} | time: {:5.2f}s | valid loss {:5.2f} | '
                 'valid ppl {:8.2f}'.format(epoch, (time.time() - epoch_start_time),
-                                           val_loss, math.exp(val_loss)))
+                                           val_loss, 2**val_loss))
         print('-' * 89)
         # Save the model if the validation loss is the best we've seen so far.
         if not best_val_loss or val_loss < best_val_loss:
