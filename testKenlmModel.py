@@ -31,27 +31,27 @@ def probOutputs(model, sentence, vocab, word2idx, idx2word, bos = True, eos = Tr
 
 		words = sentence.split()
 		words = words + ['</s>'] #Add the end of sentence token
-		state = kenlm.State() 
+		state = kenlm.State()
 		if bos:
 			model.BeginSentenceWrite(state)
 		else:
 			model.NullContextWrite(state)
-		out_state = kenlm.State() 
+		out_state = kenlm.State()
 		total = 0.0
 		allStateScores = []
-		
+
 		sentPreds = []
 		for word in words:
 			if(word not in vocab):
 
 				word = '<unk>'
-			
+
 			goldIndex = word2idx[word]
 
 
-			stateScore = [0.0] * len(vocab) 
-			
-			
+			stateScore = [0.0] * len(vocab)
+
+
 			origState = state.__copy__()
 
 			for w in vocab:
@@ -59,13 +59,14 @@ def probOutputs(model, sentence, vocab, word2idx, idx2word, bos = True, eos = Tr
 				inState = origState.__copy__()
 				#Calculate the score for the current word in the vocab
 				wScore = model.BaseScore(inState, str(w.encode('utf-8')), out_state)
-				
+
 				stateScore[word2idx[w]] = wScore
 			soft = softmax(stateScore)
 			sumVal = 0.0
-			
-			
+
+
 			pred = soft[goldIndex]
+			print(pred)
 			total += model.BaseScore(state, str(word), out_state)
 			state = out_state
 			sentPreds += [pred]
@@ -79,6 +80,4 @@ allSentPredInfo = {}
 for sent in testInsts:
 	counter += 1
 	sentPreds = probOutputs( model, sent, vocab, word2idx, idx2word) #returns an array of softmaxes for each step
-	print sentPreds
-	
-
+	#print(sentPreds)
