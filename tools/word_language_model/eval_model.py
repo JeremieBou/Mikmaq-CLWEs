@@ -1,7 +1,8 @@
 import argparse
 import torch
+import torch.nn as nn
 import data
-
+import numpy as np
 
 parser = argparse.ArgumentParser(description='PyTorch Wikitext-2 RNN/LSTM Language Model')
 parser.add_argument('--data', type=str, default='./data/wikitext-2',
@@ -46,17 +47,24 @@ def get_batch(source, i):
     return data, target
 
 corpus = data.Corpus(args.data)
+
 test_data = batchify(corpus.test, 10)
 
 
 ntokens = len(corpus.dictionary)
 
+def map_to_dict(x):
+    return corpus.dictionary.idx2word[x]
+
+criterion = nn.CrossEntropyLoss()
 with torch.no_grad():
     hidden = model.init_hidden(10)
 
     for i in range(0, test_data.size(0) - 1, 35):#sequence length 35
         data, targets = get_batch(test_data, i)
+
         output, hidden = model(data, hidden)
         output_flat = output.view(-1, ntokens)
-        print(data)
-        print(output_flat)
+        #print(len(data) * criterion(output_flat, targets).item())
+        for i, word in enumerate(targets):
+            print("{} {}".format(map_to_dict(word), output_flat[i][word]))
