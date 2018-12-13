@@ -1,0 +1,10 @@
+/home/jeremie/dev/fastText/build/CMakeFiles/install.dir
+/home/jeremie/dev/fastText/build/CMakeFiles/list_install_components.dir
+/home/jeremie/dev/fastText/build/CMakeFiles/rebuild_cache.dir
+/home/jeremie/dev/fastText/build/CMakeFiles/install/local.dir
+/home/jeremie/dev/fastText/build/CMakeFiles/install/strip.dir
+/home/jeremie/dev/fastText/build/CMakeFiles/edit_cache.dir
+/home/jeremie/dev/fastText/build/CMakeFiles/fasttext-shared.dir
+/home/jeremie/dev/fastText/build/CMakeFiles/fasttext-static_pic.dir
+/home/jeremie/dev/fastText/build/CMakeFiles/fasttext-static.dir
+/home/jeremie/dev/fastText/build/CMakeFiles/fasttext-bin.dir
