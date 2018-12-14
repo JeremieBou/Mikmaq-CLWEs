@@ -15,6 +15,7 @@ modelName = modelNameArr[len(modelNameArr)-1]
 testFileArr = testFile.split('/')
 testFileName = testFileArr[len(testFileArr)-1]
 vocab = json.load(open(vocabFile))
+
 word2idx = {}
 idx2word = {}
 for v in vocab:
@@ -43,7 +44,7 @@ def probOutputs(model, sentence, vocab, word2idx, idx2word, bos = True, eos = Tr
 		sentPreds = []
 		for word in words:
 			if(word not in vocab):
-
+				print("...")
 				word = '<unk>'
 
 			goldIndex = word2idx[word]
@@ -61,12 +62,11 @@ def probOutputs(model, sentence, vocab, word2idx, idx2word, bos = True, eos = Tr
 				wScore = model.BaseScore(inState, str(w.encode('utf-8')), out_state)
 
 				stateScore[word2idx[w]] = wScore
+
 			soft = softmax(stateScore)
 			sumVal = 0.0
 
-
 			pred = soft[goldIndex]
-			print(pred)
 			total += model.BaseScore(state, str(word), out_state)
 			state = out_state
 			sentPreds += [pred]
@@ -79,5 +79,5 @@ counter = 0
 allSentPredInfo = {}
 for sent in testInsts:
 	counter += 1
-	sentPreds = probOutputs( model, sent, vocab, word2idx, idx2word) #returns an array of softmaxes for each step
-	#print(sentPreds)
+	sentPreds = probOutputs( model, sent, vocab, word2idx, idx2word,  bos=False) #returns an array of softmaxes for each step
+	print(sentPreds)

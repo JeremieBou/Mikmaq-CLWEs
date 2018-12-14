@@ -1,3 +1,4 @@
+import math
 import argparse
 import torch
 import torch.nn as nn
@@ -65,6 +66,7 @@ with torch.no_grad():
 
         output, hidden = model(data, hidden)
         output_flat = output.view(-1, ntokens)
-        #print(len(data) * criterion(output_flat, targets).item())
+
         for i, word in enumerate(targets):
-            print("{} {}".format(map_to_dict(word), output_flat[i][word]))
+            probs = nn.Softmax()(output_flat[i])
+            print("{} {}".format(map_to_dict(word), math.log(probs[word])))
