@@ -7,8 +7,10 @@ import torch
 import torch.nn as nn
 import torch.onnx
 
-import data
-import model
+import fasttext
+
+from utils import data
+from models import model
 
 parser = argparse.ArgumentParser(description='PyTorch Wikitext-2 RNN/LSTM Language Model')
 parser.add_argument('--data', type=str, default='./data/wikitext-2',
@@ -55,6 +57,15 @@ parser.add_argument('--em_weights', type=str, default="fixed_uniform",
 parser.add_argument('--out_weights', type=str, default="fixed_uniform",
                     help='decode layer weights')
 
+
+parser.add_argument('--use_fasttext', action='store_true',
+                    help='use fasttext to initialize embedding layer')
+parser.add_argument('--embedding_model', type=str, default='SKIPGRAM',
+                    help='type of fasttext embedding model (SKIPGRAM, CBOW)')
+parser.add_argument('--fasttext_save', type=str, default='model',
+                    help='path to save the fasttext model')
+
+
 parser.add_argument('--save', type=str, default='model.pt',
                     help='path to save the final model')
 parser.add_argument('--onnx-export', type=str, default='',
@@ -74,6 +85,15 @@ device = torch.device("cuda" if args.cuda else "cpu")
 ###############################################################################
 
 corpus = data.Corpus(args.data)
+
+if args.use_fasttext:
+    if args.embedding_model == 'SKIPGRAM':
+        em_model = fasttext.skipgram(args.data + 'train.txt', args.fasttext_save)
+    else:
+        em_model = fasttext.cbow(args.data + 'train.txt', args.fasttext_save)
+else:
+    em_model = None
+
 
 # Starting from sequential data, batchify arranges the dataset into columns.
 # For instance, with the alphabet as the sequence and batch size 4, we'd get
@@ -113,6 +133,7 @@ model = model.RNNModel(args.model,
                         args.nlayers,
                         args.dropout,
                         args.tied,
+                        embeddings=em_model,
                         init_method=[
                             args.hin_weights,
                             args.hr_weights,

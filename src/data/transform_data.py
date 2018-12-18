@@ -10,10 +10,15 @@ if __name__ == "__main__":
         for token in in_file:
             token = token.strip().lower()
 
+            token = token.replace('’', '\'').replace('‘', '\'')\
+                         .replace('“','"').replace('”','"')\
+                         .replace('–', '-')
+
             if token and token not in ['<s>', '</s>']:
                 sent.append(token + ' ')
 
             if token == '</s>':
+                sent.append(token)
                 sents.append(sent)
                 sent = []
 

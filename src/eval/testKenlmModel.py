@@ -6,6 +6,7 @@ import json
 import numpy as np
 import time
 
+
 myModelFile = sys.argv[1]
 testFile = sys.argv[2]
 vocabFile = sys.argv[3]
@@ -18,10 +19,14 @@ testFileName = testFileArr[len(testFileArr)-1]
 vocab = json.load(open(vocabFile))
 
 if vocab.get('<unk>') == None:
-	vocab['<unk>'] = -4.7089705
+	vocab['<unk>'] = 1
 
 word2idx = {}
 idx2word = {}
+
+
+
+
 for v in vocab:
 	word2idx[v] = len(word2idx)
 	idx2word[len(idx2word)] = v
@@ -35,7 +40,7 @@ def softmax(x):
 def probOutputs(model, sentence, vocab, word2idx, idx2word, bos = True, eos = True):
 
 		words = sentence.split()
-		words = words + ['</s>'] #Add the end of sentence token
+		#words = words + ['</s>'] #Add the end of sentence token
 		state = kenlm.State()
 		if bos:
 			model.BeginSentenceWrite(state)
@@ -45,15 +50,21 @@ def probOutputs(model, sentence, vocab, word2idx, idx2word, bos = True, eos = Tr
 		total = 0.0
 		allStateScores = []
 
+		unk_types = set()
 		sentPreds = []
+
 		for word in words:
 			if(word not in vocab):
-				word = '<unk>'
+				key = '<unk>'
+			else:
+				key = word
 
-			goldIndex = word2idx[word]
+			goldIndex = word2idx[key]
 
 
 			stateScore = [0.0] * len(vocab)
+			stateUnked = [0.0] * len(vocab)
+
 
 
 			origState = state.__copy__()
@@ -62,9 +73,10 @@ def probOutputs(model, sentence, vocab, word2idx, idx2word, bos = True, eos = Tr
 				#Keep track of the original state and reset it so the state represents the sate timestep for each word in the vocab that is tested
 				inState = origState.__copy__()
 				#Calculate the score for the current word in the vocab
-				wScore = model.BaseScore(inState, str(w.encode('utf-8')), out_state)
+				score = model.BaseFullScore(inState, str(w.encode('utf-8')), out_state)
 
-				stateScore[word2idx[w]] = wScore
+				stateScore[word2idx[w]] = score.log_prob
+				stateUnked[word2idx[w]] = score.oov
 
 			soft = softmax(stateScore)
 			sumVal = 0.0
@@ -73,16 +85,24 @@ def probOutputs(model, sentence, vocab, word2idx, idx2word, bos = True, eos = Tr
 			total += model.BaseScore(state, str(word), out_state)
 			state = out_state
 			sentPreds += [pred]
+			if stateUnked[goldIndex] or word == 'unk':
+				unk_types.add(word)
+				print "<unk> ", math.log(pred)
+			else:
+				print word, " ", math.log(pred)
+		return sentPreds, unk_types
 
-			print word, " ", math.log(pred)
-		return sentPreds
 
 
 model = kenlm.LanguageModel(myModelFile)
 testInsts = open(testFile).readlines()
 counter = 0
+unk_types = set()
 allSentPredInfo = {}
 for sent in testInsts:
 	counter += 1
-	sentPreds = probOutputs( model, sent, vocab, word2idx, idx2word,  bos=False) #returns an array of softmaxes for each step
+	sentPreds, new_unk_types = probOutputs( model, sent, vocab, word2idx, idx2word,  bos=False) #returns an array of softmaxes for each step
+	unk_types = unk_types.union(new_unk_types)
 	#print(sentPreds)
+
+print "<UNKTYPES> ", len(unk_types)

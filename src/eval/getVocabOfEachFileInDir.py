@@ -18,6 +18,6 @@ for f in os.listdir(inDir):
 					vocab[word] = 1
 				else:
 					vocab[word] += 1
+
 	outPath = outDir+f+'-Vocab.json'
 	json.dump(vocab, open(outPath, 'w'))
-
