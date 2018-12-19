@@ -3,6 +3,11 @@ import os
 
 if __name__ == "__main__":
     input = sys.argv[1]
+
+    if sys.argv[2] and sys.argv[2] == 'no_s':
+        no_s = True
+    else:
+        no_s = False
     sents = []
     with open(input) as in_file:
         sent = []
@@ -18,7 +23,8 @@ if __name__ == "__main__":
                 sent.append(token + ' ')
 
             if token == '</s>':
-                sent.append(token)
+                if not no_s:
+                    sent.append(token)
                 sents.append(sent)
                 sent = []
 

@@ -1,5 +1,5 @@
 import math
-
+import torch
 import torch.nn as nn
 from torch.nn import init
 
@@ -9,6 +9,7 @@ class RNNModel(nn.Module):
     def __init__(self, rnn_type, ntoken, ninp, nhid, nlayers, dropout=0.5,
                     tie_weights=False,
                     embeddings=None,
+                    vocab=None,
                     init_method=[
                         'fixed_uniform',
                         'fixed_uniform',
@@ -54,9 +55,11 @@ class RNNModel(nn.Module):
                             init_em_weights=init_method[4],
                             init_out_weights=init_method[5])
 
-        if embeddings:
-            self.init_embeddings_weights(embeddings)
-
+        if embeddings and vocab:
+            print('Starting initializing embeddings')
+            with torch.no_grad():
+                self.init_embeddings_weights(embeddings, vocab)
+            print('Finished initializing embeddings')
 
     def init_weight(self, tensor, init_type='fixed_uniform'):
         if init_type == 'mikolov_uniform':
@@ -110,8 +113,9 @@ class RNNModel(nn.Module):
                 self.init_weight(self.decoder.weight.data, init_out_weights if init_out_weights else init_type)
                 self.decoder.bias.data.zero_()
 
-    def init_embeddings_weights(self, init_embeddings_weights):
-
+    def init_embeddings_weights(self, model, vocab):
+        for i, word in enumerate(vocab.idx2word):
+            self.encoder.weight.data[i] = torch.FloatTensor(model[word])
 
     def forward(self, input, hidden):
         emb = self.drop(self.encoder(input))

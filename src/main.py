@@ -10,7 +10,7 @@ import torch.onnx
 import fasttext
 
 from utils import data
-from models import model
+import model
 
 parser = argparse.ArgumentParser(description='PyTorch Wikitext-2 RNN/LSTM Language Model')
 parser.add_argument('--data', type=str, default='./data/wikitext-2',
@@ -88,9 +88,13 @@ corpus = data.Corpus(args.data)
 
 if args.use_fasttext:
     if args.embedding_model == 'SKIPGRAM':
-        em_model = fasttext.skipgram(args.data + 'train.txt', args.fasttext_save)
+        em_model = fasttext.skipgram(args.data + 'train.txt',
+                                     args.fasttext_save,
+                                     dim=args.emsize)
     else:
-        em_model = fasttext.cbow(args.data + 'train.txt', args.fasttext_save)
+        em_model = fasttext.cbow(args.data + 'train.txt',
+                                 args.fasttext_save,
+                                 dim=args.emsize)
 else:
     em_model = None
 
@@ -134,6 +138,7 @@ model = model.RNNModel(args.model,
                         args.dropout,
                         args.tied,
                         embeddings=em_model,
+                        vocab=corpus.dictionary,
                         init_method=[
                             args.hin_weights,
                             args.hr_weights,
@@ -187,7 +192,7 @@ def evaluate(data_source):
             output_flat = output.view(-1, ntokens)
             total_loss += len(data) * criterion(output_flat, targets).item()
             hidden = repackage_hidden(hidden)
-    return total_loss / len(data_source)
+    return total_loss / (len(data_source) - 1)
 
 
 def train():
@@ -221,7 +226,7 @@ def train():
             print('| epoch {:3d} | {:5d}/{:5d} batches | lr {:02.2f} | ms/batch {:5.2f} | '
                     'loss {:5.2f} | ppl {:8.2f}'.format(
                 epoch, batch, len(train_data) // args.bptt, lr,
-                elapsed * 1000 / args.log_interval, cur_loss, 2**(cur_loss)))
+                elapsed * 1000 / args.log_interval, cur_loss, math.exp(cur_loss)))
             total_loss = 0
             start_time = time.time()
 
@@ -248,7 +253,7 @@ try:
         print('-' * 89)
         print('| end of epoch {:3d} | time: {:5.2f}s | valid loss {:5.2f} | '
                 'valid ppl {:8.2f}'.format(epoch, (time.time() - epoch_start_time),
-                                           val_loss, 2**val_loss))
+                                           val_loss, math.exp(val_loss)))
         print('-' * 89)
         # Save the model if the validation loss is the best we've seen so far.
         if not best_val_loss or val_loss < best_val_loss:
