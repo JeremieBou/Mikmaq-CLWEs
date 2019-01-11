@@ -7,7 +7,7 @@ import torch
 import torch.nn as nn
 import torch.onnx
 
-import fasttext
+import fastText
 
 from utils import data
 import model
@@ -62,8 +62,21 @@ parser.add_argument('--use_fasttext', action='store_true',
                     help='use fasttext to initialize embedding layer')
 parser.add_argument('--embedding_model', type=str, default='SKIPGRAM',
                     help='type of fasttext embedding model (SKIPGRAM, CBOW)')
-parser.add_argument('--fasttext_save', type=str, default='model',
-                    help='path to save the fasttext model')
+parser.add_argument('--fasttext_save', type=str, default='embeddings',
+                    help='path of the fasttext model')
+parser.add_argument('--fasttext_maxn', type=input, default=6,
+                    help='character level n grams to use')
+parser.add_argument('--fasttext_epochs', type=input, default=5,
+                    help='max loops over dataset to perform')
+
+
+
+parser.add_argument('--use_clwe', action='store_true',
+                    help='initialize embeddings layers using cross-lingual word embeddigs')
+parser.add_argument('--clwe_method', type=str, default='CLWE',
+                    help='clwe method to use embedding model (SIMPLE, DUONG)')
+parser.add_argument('--panlex_loc', type=str, default='lexicon',
+                    help='path of the panlex lexicon formated from the fasttext embedding language to the target')
 
 
 parser.add_argument('--save', type=str, default='model.pt',
@@ -85,16 +98,31 @@ device = torch.device("cuda" if args.cuda else "cpu")
 ###############################################################################
 
 corpus = data.Corpus(args.data)
+panlex = False
 
-if args.use_fasttext:
-    if args.embedding_model == 'SKIPGRAM':
-        em_model = fasttext.skipgram(args.data + 'train.txt',
-                                     args.fasttext_save,
-                                     dim=args.emsize)
+if os.path.isfile(args.fasttext_save + '.bin') \
+        and os.path.isfile(args.fasttext_save + '.vec'):
+    embedding_exists = True
+else:
+    embedding_exists = False
+
+if args.use_clwe:
+    if embedding_exists:
+        em_model = fastText.load_model(args.fasttext_save + '.bin')
+        panlex = data.Panlex(args.panlex_loc)
     else:
-        em_model = fasttext.cbow(args.data + 'train.txt',
-                                 args.fasttext_save,
-                                 dim=args.emsize)
+        print("Please specify english word embeddigs using the --fasttext_save parameter")
+elif args.use_fasttext:
+    if embedding_exists:
+        em_model = fastText.load_model(args.fasttext_save + '.bin')
+    else:
+        em_model = fastText.train_unsupervised(args.data + 'train.txt',
+                                               model=args.embedding_model.lower(),
+                                               dim=args.emsize,
+                                               maxn=args.fasttext_maxn,
+                                               epoch=args.fasttext_epochs)
+        em_model.save_model(args.fasttext_save + '.bin')
+
 else:
     em_model = None
 
@@ -138,6 +166,8 @@ model = model.RNNModel(args.model,
                         args.dropout,
                         args.tied,
                         embeddings=em_model,
+                        panlex=panlex,
+                        clwe_method=args.clwe_method,
                         vocab=corpus.dictionary,
                         init_method=[
                             args.hin_weights,

@@ -70,13 +70,13 @@ class Lexicon():
                     for inp in value[self.in_lang]:
                         for out in value[self.out_lang]:
                             output.append((inp, out))
-                else:
-                    for out in value[self.out_lang]:
-                        output.append(("<UNK>", out))
+                
         output = list(set(output))
         output.sort(key=lambda exp: exp[0]+exp[1])
 
         return output
+
+
 
     def print_output(self):
         output = self.make_output()
@@ -84,7 +84,6 @@ class Lexicon():
         for out in output:
             print('{}_{}\t\t{}_{}'.format(self.in_lang[0:3], out[0],
                                           self.out_lang[0:3], out[1]))
-
 
 
 def rurl(req, params=None, long=False):
@@ -172,6 +171,6 @@ if __name__ == "__main__":
         lexicon = make_lexicon(in_lang, out_lang)
         lexicon.print_output()
     else:
-        print("""use language format XXX_000, were XXX is the alpha-3 code,
+        print("""use language format XXX-000, were XXX is the alpha-3 code,
                 and 000 is the language variety(use 000 if you don't know what
                 the variety is)""")

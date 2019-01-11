@@ -9,6 +9,8 @@ class RNNModel(nn.Module):
     def __init__(self, rnn_type, ntoken, ninp, nhid, nlayers, dropout=0.5,
                     tie_weights=False,
                     embeddings=None,
+                    panlex=None,
+                    clwe_method="SIMPLE",
                     vocab=None,
                     init_method=[
                         'fixed_uniform',
@@ -55,11 +57,20 @@ class RNNModel(nn.Module):
                             init_em_weights=init_method[4],
                             init_out_weights=init_method[5])
 
+
         if embeddings and vocab:
-            print('Starting initializing embeddings')
-            with torch.no_grad():
-                self.init_embeddings_weights(embeddings, vocab)
-            print('Finished initializing embeddings')
+            if panlex:
+                if clwe_method == "SIMPLE":
+                    print('Starting initializing clwe')
+                    self.init_clwe_simple(embeddings, vocab, panlex.lexicon)
+                    print('Finished initializing clwe')
+                elif clwe_method == "DUONG":
+                    pass
+            else:
+                print('Starting initializing embeddings')
+                with torch.no_grad():
+                    self.init_embeddings_weights(embeddings, vocab)
+                print('Finished initializing embeddings')
 
     def init_weight(self, tensor, init_type='fixed_uniform'):
         if init_type == 'mikolov_uniform':
@@ -115,7 +126,14 @@ class RNNModel(nn.Module):
 
     def init_embeddings_weights(self, model, vocab):
         for i, word in enumerate(vocab.idx2word):
-            self.encoder.weight.data[i] = torch.FloatTensor(model[word])
+            self.encoder.weight.data[i] = torch.FloatTensor(model.get_word_vector(word))
+
+    def init_clwe_simple(self, model, vocab, lexicon):
+        for english, micmac in lexicon.items():
+            i = vocab.word2idx.get(micmac, -1)
+            if i >= 0:
+                self.encoder.weight.data[i] \
+                            = torch.FloatTensor(model.get_word_vector(english))
 
     def forward(self, input, hidden):
         emb = self.drop(self.encoder(input))
