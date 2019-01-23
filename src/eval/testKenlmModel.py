@@ -31,6 +31,7 @@ for v in vocab:
 	word2idx[v] = len(word2idx)
 	idx2word[len(idx2word)] = v
 
+    lexicon.add_expressions(in_expressions)
 def softmax(x):
     ex = np.exp(x)
     sum_ex = np.sum( np.exp(x))

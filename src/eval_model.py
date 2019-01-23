@@ -45,14 +45,12 @@ def batchify(data, bsz):
 def get_batch(source, i):
     seq_len = min(35, len(source) - 1 - i)
     data = source[i:i+seq_len]
-    target = source[i+1:i+1+seq_len].view(-1)
+    target = source[i+1:i+1+seq_len]
     return data, target
 
 corpus = data.Corpus(args.data)
 
 test_data = batchify(corpus.test, 10)
-
-
 ntokens = len(corpus.dictionary)
 
 def map_to_dict(x):
@@ -65,8 +63,16 @@ with torch.no_grad():
     for i in range(0, test_data.size(0) - 1, 35):#sequence length 35
         data, targets = get_batch(test_data, i)
         output, hidden = model(data, hidden)
-        output_flat = output.view(-1, ntokens)
 
-        for i, word in enumerate(targets):
+        targets_t = targets.transpose(0, -1).contiguous()
+        output_t = output.transpose(0, 1).contiguous()
+
+        targets_flat = targets_t.view(-1)
+        output_flat = output_t.view(-1, ntokens)
+
+
+        base = 0
+
+        for i, word in enumerate(targets_flat):
             probs = nn.Softmax()(output_flat[i])
             print("{} {}".format(map_to_dict(word), math.log(probs[word])))
