@@ -22,8 +22,6 @@ for sent in tests:
 
         if score[2]:
             unk_types.add(sent_split[i])
-            word = "<unk>"
-        print("{}  {}".format(word, prob))
-
-
-print("{}  {}".format("<UNKTYPES> ", len(unk_types)))
+            print("{}  {}   <UNK>".format(word, prob))
+        else:
+            print("{}  {}".format(word, prob))

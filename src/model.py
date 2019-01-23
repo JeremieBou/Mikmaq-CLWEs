@@ -1,4 +1,6 @@
 import math
+from random import randint
+
 import torch
 import torch.nn as nn
 from torch.nn import init
@@ -57,20 +59,29 @@ class RNNModel(nn.Module):
                             init_em_weights=init_method[4],
                             init_out_weights=init_method[5])
 
-
-        if embeddings and vocab:
-            if panlex:
-                if clwe_method == "SIMPLE":
+        with torch.no_grad():
+            if embeddings and vocab:
+                if panlex:
                     print('Starting initializing clwe')
-                    self.init_clwe_simple(embeddings, vocab, panlex.lexicon)
+                    if clwe_method == "SIMPLE":
+                        self.init_clwe_simple(embeddings, vocab, panlex.lexicon)
+                    elif clwe_method == "RAND":
+                        self.init_clwe_rand(embeddings, vocab, panlex.lexicon)
+                    elif clwe_method == "RAND2":
+                        self.init_embeddings_weights(embeddings, vocab)
+                        self.init_clwe_rand(embeddings, vocab, panlex.lexicon)
+                    elif clwe_method == "RAND_TRANS":
+                        self.init_clwe_randtrans(embeddings, vocab, panlex.lexicon)
+                    elif clwe_method == "RAND_COMBO":
+                        self.init_clwe_randtrans(embeddings, vocab, panlex.lexicon)
+                        self.init_clwe_simple(embeddings, vocab, panlex.lexicon)
+                    elif clwe_method == "DUONG":
+                        pass
                     print('Finished initializing clwe')
-                elif clwe_method == "DUONG":
-                    pass
-            else:
-                print('Starting initializing embeddings')
-                with torch.no_grad():
+                else:
+                    print('Starting initializing embeddings')
                     self.init_embeddings_weights(embeddings, vocab)
-                print('Finished initializing embeddings')
+                    print('Finished initializing embeddings')
 
     def init_weight(self, tensor, init_type='fixed_uniform'):
         if init_type == 'mikolov_uniform':
@@ -134,6 +145,29 @@ class RNNModel(nn.Module):
             if i >= 0:
                 self.encoder.weight.data[i] \
                             = torch.FloatTensor(model.get_word_vector(english))
+
+
+
+    def init_clwe_randtrans(self, model, vocab, lexicon):
+        words = model.get_words()
+        for english, micmac in lexicon.items():
+            i = vocab.word2idx.get(micmac, -1)
+            if i >= 0:
+                english_word = words[randint(0, len(words))]
+
+                self.encoder.weight.data[i] \
+                            = torch.FloatTensor(model.get_word_vector(english_word))
+
+
+    def init_clwe_rand(self, model, vocab, lexicon):
+        lexicon_list = list(lexicon.items())
+
+        for i, word, in enumerate(vocab.idx2word):
+            j = randint(0, len(lexicon_list) - 1)
+
+            entry = lexicon_list[j]
+            embed = model.get_word_vector(entry[0])
+            self.encoder.weight.data[i] = torch.FloatTensor(embed)
 
     def forward(self, input, hidden):
         emb = self.drop(self.encoder(input))

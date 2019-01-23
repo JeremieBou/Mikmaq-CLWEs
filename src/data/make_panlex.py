@@ -1,6 +1,7 @@
 import time
 import sys
 import json
+import sqlite3
 
 from requests import get, post
 
@@ -29,6 +30,19 @@ class Lexicon():
         }
 
         self.lexicon = {}
+
+    def add_db_expression(self, meaning, in_expr, out_expr):
+        if not self.lexicon.get(meaning):
+            self.lexicon[meaning] = {
+                self.in_lang: set(),
+                self.out_lang: set()
+            }
+
+        self.lexicon[meaning][self.in_lang].add(in_expr)
+        self.lexicon[meaning][self.out_lang].add(out_expr)
+
+        self.in_count += 1
+        self.out_count += 1
 
     def add_expression(self, expression):
         lang = self.lang_ids.get(expression['langvar'])
@@ -70,7 +84,7 @@ class Lexicon():
                     for inp in value[self.in_lang]:
                         for out in value[self.out_lang]:
                             output.append((inp, out))
-                
+
         output = list(set(output))
         output.sort(key=lambda exp: exp[0]+exp[1])
 
@@ -147,6 +161,57 @@ def translate(ids, target):
     return out
 
 
+def build_query(in_lang, out_lang):
+    query = """
+        select quality,
+               d2.txt,
+               e2.txt,
+               d2.meaning
+            from expr as e2
+            join (
+                select engd.quality,
+                       engd.expr,
+                       micd.txt,
+                       engd.meaning
+
+                  from denotationx as engd
+                  join (
+                    select *
+                      from langvar
+                      where uid == '{}'
+                  ) as eng on engd.langvar == eng.id
+                  join (
+                    select d.meaning,
+                           ex.txt
+                      from denotationx as d
+                      join (
+                        select *
+                          from expr as e
+                          join (
+                            select *
+                              from langvar
+                              where uid == '{}'
+                          ) as l on l.id == e.langvar
+                      ) as ex on ex.id == d.expr
+                  ) as micd on micd.meaning == engd.meaning
+            ) as d2 on d2.expr == e2.id;
+
+
+    """.format(in_lang, out_lang)
+
+    return query
+
+def make_db_lexicon(in_lang, out_lang, connection):
+    lexicon = Lexicon(in_lang, out_lang)
+
+    c = connection.cursor()
+    output = c.execute(build_query(in_lang, out_lang))
+
+    for o in output:
+        lexicon.add_db_expression(o[3], o[2], o[1])
+
+    return lexicon
+
 def make_lexicon(in_lang, out_lang):
     lexicon = Lexicon(in_lang, out_lang)
     in_expressions = get_expressions(in_lang)
@@ -167,7 +232,17 @@ if __name__ == "__main__":
     in_lang = sys.argv[1]
     out_lang = sys.argv[2]
 
-    if len(in_lang) == len(out_lang) == 7:
+    try:
+        database = sys.argv[3]
+    except:
+        database = None
+
+
+    if database:
+        conn = sqlite3.connect(database)
+        lexicon = make_db_lexicon(in_lang, out_lang, conn)
+        lexicon.print_output()
+    elif len(in_lang) == len(out_lang) == 7:
         lexicon = make_lexicon(in_lang, out_lang)
         lexicon.print_output()
     else:

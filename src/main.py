@@ -74,7 +74,7 @@ parser.add_argument('--fasttext_epochs', type=input, default=5,
 parser.add_argument('--use_clwe', action='store_true',
                     help='initialize embeddings layers using cross-lingual word embeddigs')
 parser.add_argument('--clwe_method', type=str, default='CLWE',
-                    help='clwe method to use embedding model (SIMPLE, DUONG)')
+                    help='clwe method to use embedding model (SIMPLE, DUONG, RAND, RAND_TRANS, RAND_COMBO)')
 parser.add_argument('--panlex_loc', type=str, default='lexicon',
                     help='path of the panlex lexicon formated from the fasttext embedding language to the target')
 
@@ -100,8 +100,7 @@ device = torch.device("cuda" if args.cuda else "cpu")
 corpus = data.Corpus(args.data)
 panlex = False
 
-if os.path.isfile(args.fasttext_save + '.bin') \
-        and os.path.isfile(args.fasttext_save + '.vec'):
+if os.path.isfile(args.fasttext_save + '.vec'):
     embedding_exists = True
 else:
     embedding_exists = False
