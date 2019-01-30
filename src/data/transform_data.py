@@ -4,9 +4,10 @@ import os
 if __name__ == "__main__":
     input = sys.argv[1]
 
-    if sys.argv[2] and sys.argv[2] == 'no_s':
-        no_s = True
-    else:
+    try:
+        if sys.argv[2] == 'no_s':
+            no_s = True
+    except IndexError:
         no_s = False
     sents = []
     with open(input) as in_file:
