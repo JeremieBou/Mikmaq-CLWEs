@@ -8,6 +8,7 @@ import torch.nn as nn
 import torch.onnx
 
 import fastText
+from gensim.models import KeyedVectors
 
 from utils import data
 import model
@@ -100,17 +101,21 @@ device = torch.device("cuda" if args.cuda else "cpu")
 corpus = data.Corpus(args.data)
 panlex = False
 
-if os.path.isfile(args.fasttext_save + '.vec'):
+if os.path.isfile(args.fasttext_save + '.vec') or \
+        (os.path.isfile(args.fasttext_save) and args.fasttext_save[-4:] == '.emb'):
     embedding_exists = True
 else:
     embedding_exists = False
 
 if args.use_clwe:
     if embedding_exists:
-        em_model = fastText.load_model(args.fasttext_save + '.bin')
+        if args.clwe_method == "DUONG":
+            em_model = KeyedVectors.load_word2vec_format(args.fasttext_save)
+        else:
+            em_model = fastText.load_model(args.fasttext_save + '.bin')
         panlex = data.Panlex(args.panlex_loc)
     else:
-        print("Please specify english word embeddigs using the --fasttext_save parameter")
+        print("Please specify english or duong word embeddigs using the --fasttext_save parameter")
 elif args.use_fasttext:
     if embedding_exists:
         em_model = fastText.load_model(args.fasttext_save + '.bin')

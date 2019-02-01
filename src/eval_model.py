@@ -3,7 +3,7 @@ import argparse
 import torch
 import torch.nn as nn
 from utils import data
-from models import model
+import model
 import numpy as np
 
 parser = argparse.ArgumentParser(description='PyTorch Wikitext-2 RNN/LSTM Language Model')

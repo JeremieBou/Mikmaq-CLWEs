@@ -14,7 +14,7 @@ from multiprocessing import Pool
 from nltk.corpus import stopwords
 
 def _remove_non_printed_chars(string):
-    reg = re.compile('[^a-zA-Zа-яА-ЯёЁ]')
+    reg = re.compile('[^a-zA-Z.,?!:;]|"')
     return reg.sub(' ', string)
 
 def _remove_stop_words(string,sw=[]):
@@ -30,7 +30,7 @@ def clean_string(string,
                  min_len=2,
                  max_len=30):
 
-    #string = _remove_non_printed_chars(string)
+    string = _remove_non_printed_chars(string)
     #string = _remove_stop_words(string,stop_words_list)
     string = _trim_string(string)
     # also remove short words, most likely containing addresses / crap / left-overs / etc remaining after removal
@@ -60,7 +60,7 @@ def remove_special_chars(text,char_list):
     return text.replace(u'\xa0', u' ')
 
 def process_wiki_files(wiki_file):
-    chars = ['\n']
+    chars = ['\n', '"']
     global sw
 
     with open(wiki_file, encoding='utf-8') as f:
@@ -68,6 +68,8 @@ def process_wiki_files(wiki_file):
 
     articles = splitkeepsep(content,'<doc id=')
     df = pd.DataFrame(columns=['proc_sentence'])
+
+    sents = []
 
     for article in articles:
         uuid = uuid4()
@@ -78,15 +80,17 @@ def process_wiki_files(wiki_file):
         sentences = nltk.sent_tokenize(article)
         proc_sentences = [clean_string(sentence,sw) for sentence in sentences]
         proc_lens = [len(sentence.split(' ')) for sentence in proc_sentences]
-
+        sents.append(proc_sentences)
+        """
         temp_df = pd.DataFrame(
             {
              'proc_sentence':proc_sentences
             })
 
         df = df.append(temp_df)
+        """
 
-    return df
+    return sents
 
 def list_multiprocessing(param_lst,
                          func,
@@ -96,11 +100,18 @@ def list_multiprocessing(param_lst,
 
     with Pool(workers) as p:
         apply_lst = [([params], func, i, kwargs) for i,params in enumerate(param_lst)]
-        result = list(tqdm(p.imap(_apply_lst, apply_lst), total=len(apply_lst)))
+        results = tqdm(p.imap(_apply_lst, apply_lst), total=len(apply_lst))
+
+        for result in results:
+            for sents in result:
+                if type(sents) == list:
+                    for sent in sents:
+                        for subsent in sent:
+                            print(subsent)
 
     # lists do not need such sorting, but this can be useful later
-    result=sorted(result,key=lambda x:x[0])
-    return [_[1] for _ in result]
+    #result=sorted(result,key=lambda x:x[0])
+    #return [_[1] for _ in result]
 
 def _apply_lst(args):
     params, func, num, kwargs = args
@@ -108,7 +119,7 @@ def _apply_lst(args):
 
 wiki_files = []
 
-for filename in glob.iglob('data/wiki/*/*', recursive=True):
+for filename in glob.iglob(sys.argv[1] + '*/*', recursive=True):
     wiki_files.append(filename)
 
 # plain list of stop words
@@ -116,10 +127,16 @@ sw_en = set(stopwords.words('english'))
 sw_ru = set(stopwords.words('russian'))
 sw = list(sw_ru.union(sw_en))
 
-df = list_multiprocessing(wiki_files,
-                          process_wiki_files,
-                          workers=4)
+#sents =
+list_multiprocessing(wiki_files,
+                      process_wiki_files,
+                      workers=8)
 
-df = pd.concat(df).reset_index(drop=True)
+#for sublist in sents:#
+    #for sent in sublist:
+    #    for subsent in sent:
+            #print(subsent)
+
+#sents = pd.concat(df).reset_index(drop=True)
 #df.article_uuid = df.article_uuid.astype(str)
-df.to_csv('data/ruwiki_2018_09_25.csv')
+#df.to_csv(sys.argv[2])

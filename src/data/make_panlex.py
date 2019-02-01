@@ -83,6 +83,8 @@ class Lexicon():
                 if len(value[self.in_lang]) > 0:
                     for inp in value[self.in_lang]:
                         for out in value[self.out_lang]:
+                            inp = inp.strip().replace(' ', '_')
+                            out = inp.strip().replace(' ', '_')
                             output.append((inp, out))
 
         output = list(set(output))
@@ -93,8 +95,9 @@ class Lexicon():
 
 
     def print_output(self):
+        print("???")
         output = self.make_output()
-
+        print("???")
         for out in output:
             print('{}_{}\t\t{}_{}'.format(self.in_lang[0:3], out[0],
                                           self.out_lang[0:3], out[1]))
@@ -206,10 +209,12 @@ def make_db_lexicon(in_lang, out_lang, connection):
 
     c = connection.cursor()
     output = c.execute(build_query(in_lang, out_lang))
-
+    print('???')
+    print(len(output.fetchall()))
     for o in output:
         lexicon.add_db_expression(o[3], o[2], o[1])
 
+    print("???")
     return lexicon
 
 def make_lexicon(in_lang, out_lang):
@@ -241,9 +246,6 @@ if __name__ == "__main__":
     if database:
         conn = sqlite3.connect(database)
         lexicon = make_db_lexicon(in_lang, out_lang, conn)
-        lexicon.print_output()
-    elif len(in_lang) == len(out_lang) == 7:
-        lexicon = make_lexicon(in_lang, out_lang)
         lexicon.print_output()
     else:
         print("""use language format XXX-000, were XXX is the alpha-3 code,

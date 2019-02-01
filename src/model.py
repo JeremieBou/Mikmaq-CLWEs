@@ -1,6 +1,7 @@
 import math
 from random import randint
 
+import numpy as np
 import torch
 import torch.nn as nn
 from torch.nn import init
@@ -76,7 +77,7 @@ class RNNModel(nn.Module):
                         self.init_clwe_randtrans(embeddings, vocab, panlex.lexicon)
                         self.init_clwe_simple(embeddings, vocab, panlex.lexicon)
                     elif clwe_method == "DUONG":
-                        pass
+                        self.init_duong(embeddings, vocab)
                     print('Finished initializing clwe')
                 else:
                     print('Starting initializing embeddings')
@@ -139,12 +140,29 @@ class RNNModel(nn.Module):
         for i, word in enumerate(vocab.idx2word):
             self.encoder.weight.data[i] = torch.FloatTensor(model.get_word_vector(word))
 
+
+    def init_duong(self, model, vocab):
+        matches = 0
+        for i, word in enumerate(vocab.idx2word):
+            try:
+                x = model['mi_' + word]
+                self.encoder.weight.data[i] = torch.FloatTensor( x)#/np.linalg.norm(x)
+                matches += 1
+            except KeyError:
+                pass
+
+        print("{} matches out of {} words".format(matches, len(vocab.idx2word)))
+
     def init_clwe_simple(self, model, vocab, lexicon):
+        matches = 0
         for english, micmac in lexicon.items():
             i = vocab.word2idx.get(micmac, -1)
             if i >= 0:
                 self.encoder.weight.data[i] \
                             = torch.FloatTensor(model.get_word_vector(english))
+
+        print("{} matches out of {} words".format(matches, len(vocab.idx2word)))
+
 
 
 
