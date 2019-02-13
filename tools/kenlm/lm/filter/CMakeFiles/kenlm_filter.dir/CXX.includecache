@@ -1,4 +1,4 @@
-#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
 
 #IncludeRegexScan: ^.*$
 
@@ -330,13 +330,13 @@ algorithm
 cstring
 -
 
-/home/jeremie/dev/kenlm/lm/filter/arpa_io.cc
+/home/jeremie/dev/kenlm2/kenlm/lm/filter/arpa_io.cc
 lm/filter/arpa_io.hh
-/home/jeremie/dev/kenlm/lm/filter/lm/filter/arpa_io.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/filter/lm/filter/arpa_io.hh
 util/file_piece.hh
-/home/jeremie/dev/kenlm/lm/filter/util/file_piece.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/filter/util/file_piece.hh
 util/string_stream.hh
-/home/jeremie/dev/kenlm/lm/filter/util/string_stream.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/filter/util/string_stream.hh
 iostream
 -
 ostream
@@ -352,11 +352,11 @@ cerrno
 cstring
 -
 
-/home/jeremie/dev/kenlm/lm/filter/phrase.cc
+/home/jeremie/dev/kenlm2/kenlm/lm/filter/phrase.cc
 lm/filter/phrase.hh
-/home/jeremie/dev/kenlm/lm/filter/lm/filter/phrase.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/filter/lm/filter/phrase.hh
 lm/filter/format.hh
-/home/jeremie/dev/kenlm/lm/filter/lm/filter/format.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/filter/lm/filter/format.hh
 algorithm
 -
 functional
@@ -372,9 +372,9 @@ vector
 cctype
 -
 
-/home/jeremie/dev/kenlm/lm/filter/vocab.cc
+/home/jeremie/dev/kenlm2/kenlm/lm/filter/vocab.cc
 lm/filter/vocab.hh
-/home/jeremie/dev/kenlm/lm/filter/lm/filter/vocab.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/filter/lm/filter/vocab.hh
 istream
 -
 iostream

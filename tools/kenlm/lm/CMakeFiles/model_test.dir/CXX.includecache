@@ -1,4 +1,4 @@
-#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
 
 #IncludeRegexScan: ^.*$
 
@@ -518,9 +518,9 @@ cassert
 string
 -
 
-/home/jeremie/dev/kenlm/lm/model_test.cc
+/home/jeremie/dev/kenlm2/kenlm/lm/model_test.cc
 lm/model.hh
-/home/jeremie/dev/kenlm/lm/lm/model.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/lm/model.hh
 cstdlib
 -
 cstring

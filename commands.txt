@@ -95,7 +95,7 @@
 
             ./tools/XlingualEmb/xlingemb \
                         -train data/transformed/duong_data/en200k_mi.txt \
-                        -output models/embeddings/duong/en200k.mi.word300_skip.emb \
+                        -output models/embeddings/duong/en200k.mi.word300_skip_all.emb \
                         -size 300 \
                         -window 48 \
                         -iter 15 \
@@ -107,4 +107,4 @@
                         -threads 8 \
                         -min-count 1 \
                         -dict data/lexicon/eng-mic3.txt \
-                        -outputn en200k.it.context300_skip.emb
+                        -outputn en200k.it.context300_skip_all.emb

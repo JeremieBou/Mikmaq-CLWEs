@@ -1,4 +1,4 @@
-#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
 
 #IncludeRegexScan: ^.*$
 
@@ -386,23 +386,23 @@ algorithm
 cstring
 -
 
-/home/jeremie/dev/kenlm/lm/filter/filter_main.cc
+/home/jeremie/dev/kenlm2/kenlm/lm/filter/filter_main.cc
 lm/filter/arpa_io.hh
-/home/jeremie/dev/kenlm/lm/filter/lm/filter/arpa_io.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/filter/lm/filter/arpa_io.hh
 lm/filter/format.hh
-/home/jeremie/dev/kenlm/lm/filter/lm/filter/format.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/filter/lm/filter/format.hh
 lm/filter/phrase.hh
-/home/jeremie/dev/kenlm/lm/filter/lm/filter/phrase.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/filter/lm/filter/phrase.hh
 lm/filter/thread.hh
-/home/jeremie/dev/kenlm/lm/filter/lm/filter/thread.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/filter/lm/filter/thread.hh
 lm/filter/vocab.hh
-/home/jeremie/dev/kenlm/lm/filter/lm/filter/vocab.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/filter/lm/filter/vocab.hh
 lm/filter/wrapper.hh
-/home/jeremie/dev/kenlm/lm/filter/lm/filter/wrapper.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/filter/lm/filter/wrapper.hh
 util/exception.hh
-/home/jeremie/dev/kenlm/lm/filter/util/exception.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/filter/util/exception.hh
 util/file_piece.hh
-/home/jeremie/dev/kenlm/lm/filter/util/file_piece.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/filter/util/file_piece.hh
 boost/ptr_container/ptr_vector.hpp
 -
 cstring

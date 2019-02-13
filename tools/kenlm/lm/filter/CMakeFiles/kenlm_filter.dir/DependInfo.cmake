@@ -4,9 +4,9 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/jeremie/dev/kenlm/lm/filter/arpa_io.cc" "/home/jeremie/dev/kenlm/build/lm/filter/CMakeFiles/kenlm_filter.dir/arpa_io.cc.o"
-  "/home/jeremie/dev/kenlm/lm/filter/phrase.cc" "/home/jeremie/dev/kenlm/build/lm/filter/CMakeFiles/kenlm_filter.dir/phrase.cc.o"
-  "/home/jeremie/dev/kenlm/lm/filter/vocab.cc" "/home/jeremie/dev/kenlm/build/lm/filter/CMakeFiles/kenlm_filter.dir/vocab.cc.o"
+  "/home/jeremie/dev/kenlm2/kenlm/lm/filter/arpa_io.cc" "/home/jeremie/dev/kenlm2/kenlm/build/lm/filter/CMakeFiles/kenlm_filter.dir/arpa_io.cc.o"
+  "/home/jeremie/dev/kenlm2/kenlm/lm/filter/phrase.cc" "/home/jeremie/dev/kenlm2/kenlm/build/lm/filter/CMakeFiles/kenlm_filter.dir/phrase.cc.o"
+  "/home/jeremie/dev/kenlm2/kenlm/lm/filter/vocab.cc" "/home/jeremie/dev/kenlm2/kenlm/build/lm/filter/CMakeFiles/kenlm_filter.dir/vocab.cc.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

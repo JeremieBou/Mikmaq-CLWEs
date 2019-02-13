@@ -1,4 +1,4 @@
-#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
 
 #IncludeRegexScan: ^.*$
 
@@ -18,9 +18,9 @@ functional
 vector
 -
 
-/home/jeremie/dev/kenlm/util/multi_intersection_test.cc
+/home/jeremie/dev/kenlm2/kenlm/util/multi_intersection_test.cc
 util/multi_intersection.hh
-/home/jeremie/dev/kenlm/util/util/multi_intersection.hh
+/home/jeremie/dev/kenlm2/kenlm/util/util/multi_intersection.hh
 boost/test/unit_test.hpp
 -
 

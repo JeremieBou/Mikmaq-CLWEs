@@ -1,4 +1,4 @@
-#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
 
 #IncludeRegexScan: ^.*$
 
@@ -542,13 +542,13 @@ cassert
 string
 -
 
-/home/jeremie/dev/kenlm/lm/common/model_buffer_test.cc
+/home/jeremie/dev/kenlm2/kenlm/lm/common/model_buffer_test.cc
 lm/common/model_buffer.hh
-/home/jeremie/dev/kenlm/lm/common/lm/common/model_buffer.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/common/lm/common/model_buffer.hh
 lm/model.hh
-/home/jeremie/dev/kenlm/lm/common/lm/model.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/common/lm/model.hh
 lm/state.hh
-/home/jeremie/dev/kenlm/lm/common/lm/state.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/common/lm/state.hh
 boost/test/unit_test.hpp
 -
 

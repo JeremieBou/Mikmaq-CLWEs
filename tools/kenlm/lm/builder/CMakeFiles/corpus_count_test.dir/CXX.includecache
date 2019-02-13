@@ -1,4 +1,4 @@
-#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
 
 #IncludeRegexScan: ^.*$
 
@@ -312,25 +312,25 @@ algorithm
 cstring
 -
 
-/home/jeremie/dev/kenlm/lm/builder/corpus_count_test.cc
+/home/jeremie/dev/kenlm2/kenlm/lm/builder/corpus_count_test.cc
 lm/builder/corpus_count.hh
-/home/jeremie/dev/kenlm/lm/builder/lm/builder/corpus_count.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/builder/lm/builder/corpus_count.hh
 lm/builder/payload.hh
-/home/jeremie/dev/kenlm/lm/builder/lm/builder/payload.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/builder/lm/builder/payload.hh
 lm/common/ngram_stream.hh
-/home/jeremie/dev/kenlm/lm/builder/lm/common/ngram_stream.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/builder/lm/common/ngram_stream.hh
 lm/common/ngram.hh
-/home/jeremie/dev/kenlm/lm/builder/lm/common/ngram.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/builder/lm/common/ngram.hh
 util/file.hh
-/home/jeremie/dev/kenlm/lm/builder/util/file.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/builder/util/file.hh
 util/file_piece.hh
-/home/jeremie/dev/kenlm/lm/builder/util/file_piece.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/builder/util/file_piece.hh
 util/tokenize_piece.hh
-/home/jeremie/dev/kenlm/lm/builder/util/tokenize_piece.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/builder/util/tokenize_piece.hh
 util/stream/chain.hh
-/home/jeremie/dev/kenlm/lm/builder/util/stream/chain.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/builder/util/stream/chain.hh
 util/stream/stream.hh
-/home/jeremie/dev/kenlm/lm/builder/util/stream/stream.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/builder/util/stream/stream.hh
 boost/test/unit_test.hpp
 -
 

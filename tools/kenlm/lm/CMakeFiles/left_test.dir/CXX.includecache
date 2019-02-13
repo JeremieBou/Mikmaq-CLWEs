@@ -1,4 +1,4 @@
-#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
 
 #IncludeRegexScan: ^.*$
 
@@ -544,13 +544,13 @@ algorithm
 cstring
 -
 
-/home/jeremie/dev/kenlm/lm/left_test.cc
+/home/jeremie/dev/kenlm2/kenlm/lm/left_test.cc
 lm/left.hh
-/home/jeremie/dev/kenlm/lm/lm/left.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/lm/left.hh
 lm/model.hh
-/home/jeremie/dev/kenlm/lm/lm/model.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/lm/model.hh
 util/tokenize_piece.hh
-/home/jeremie/dev/kenlm/lm/util/tokenize_piece.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/util/tokenize_piece.hh
 vector
 -
 boost/test/unit_test.hpp

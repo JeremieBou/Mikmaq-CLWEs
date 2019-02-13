@@ -1,4 +1,4 @@
-#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
 
 #IncludeRegexScan: ^.*$
 
@@ -40,9 +40,9 @@ cstring
 stdlib.h
 -
 
-/home/jeremie/dev/kenlm/util/sized_iterator_test.cc
+/home/jeremie/dev/kenlm2/kenlm/util/sized_iterator_test.cc
 util/sized_iterator.hh
-/home/jeremie/dev/kenlm/util/util/sized_iterator.hh
+/home/jeremie/dev/kenlm2/kenlm/util/util/sized_iterator.hh
 boost/test/unit_test.hpp
 -
 

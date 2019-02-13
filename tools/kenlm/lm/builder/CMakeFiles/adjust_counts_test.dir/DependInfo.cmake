@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/jeremie/dev/kenlm/lm/builder/adjust_counts_test.cc" "/home/jeremie/dev/kenlm/build/lm/builder/CMakeFiles/adjust_counts_test.dir/adjust_counts_test.cc.o"
+  "/home/jeremie/dev/kenlm2/kenlm/lm/builder/adjust_counts_test.cc" "/home/jeremie/dev/kenlm2/kenlm/build/lm/builder/CMakeFiles/adjust_counts_test.dir/adjust_counts_test.cc.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
@@ -20,9 +20,9 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
 
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
-  "/home/jeremie/dev/kenlm/build/lm/builder/CMakeFiles/kenlm_builder.dir/DependInfo.cmake"
-  "/home/jeremie/dev/kenlm/build/lm/CMakeFiles/kenlm.dir/DependInfo.cmake"
-  "/home/jeremie/dev/kenlm/build/util/CMakeFiles/kenlm_util.dir/DependInfo.cmake"
+  "/home/jeremie/dev/kenlm2/kenlm/build/lm/builder/CMakeFiles/kenlm_builder.dir/DependInfo.cmake"
+  "/home/jeremie/dev/kenlm2/kenlm/build/lm/CMakeFiles/kenlm.dir/DependInfo.cmake"
+  "/home/jeremie/dev/kenlm2/kenlm/build/util/CMakeFiles/kenlm_util.dir/DependInfo.cmake"
   )
 
 # Fortran module output directory.

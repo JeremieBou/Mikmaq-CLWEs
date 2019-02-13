@@ -4,8 +4,8 @@
 
 
 # Configuration directories and files
-SourceDirectory: /home/jeremie/dev/kenlm
-BuildDirectory: /home/jeremie/dev/kenlm/build
+SourceDirectory: /home/jeremie/dev/kenlm2/kenlm
+BuildDirectory: /home/jeremie/dev/kenlm2/kenlm/build
 
 # Where to place the cost data store
 CostDataFile: 
@@ -15,6 +15,9 @@ Site: MathMaker2
 
 # Build name is osname-revision-compiler, i.e. Linux-2.4.2-2smp-c++
 BuildName: Linux-c++
+
+# Subprojects
+LabelsForSubprojects: 
 
 # Submission information
 IsCDash: 
@@ -33,7 +36,7 @@ ScpCommand: /usr/bin/scp
 NightlyStartTime: 00:00:00 EDT
 
 # Commands for the build/test/submit cycle
-ConfigureCommand: "/usr/bin/cmake" "/home/jeremie/dev/kenlm"
+ConfigureCommand: "/usr/bin/cmake" "/home/jeremie/dev/kenlm2/kenlm"
 MakeCommand: /usr/bin/cmake --build . --config "${CTEST_CONFIGURATION_TYPE}" -- -i
 DefaultCTestConfigurationType: Release
 
@@ -52,6 +55,7 @@ SVNUpdateOptions:
 
 # Git options
 GITCommand: /usr/bin/git
+GITInitSubmodules: 
 GITUpdateOptions: 
 GITUpdateCustom: 
 
@@ -63,13 +67,13 @@ P4UpdateOptions:
 P4UpdateCustom: 
 
 # Generic update command
-UpdateCommand: 
+UpdateCommand: /usr/bin/git
 UpdateOptions: 
-UpdateType: 
+UpdateType: git
 
 # Compiler info
 Compiler: /usr/bin/c++
-CompilerVersion: 5.4.0
+CompilerVersion: 7.3.0
 
 # Dynamic analysis (MemCheck)
 PurifyCommand: 

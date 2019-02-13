@@ -1,4 +1,4 @@
-#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
 
 #IncludeRegexScan: ^.*$
 
@@ -370,25 +370,25 @@ string
 stdint.h
 -
 
-/home/jeremie/dev/kenlm/lm/builder/count_ngrams_main.cc
+/home/jeremie/dev/kenlm2/kenlm/lm/builder/count_ngrams_main.cc
 lm/builder/combine_counts.hh
-/home/jeremie/dev/kenlm/lm/builder/lm/builder/combine_counts.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/builder/lm/builder/combine_counts.hh
 lm/builder/corpus_count.hh
-/home/jeremie/dev/kenlm/lm/builder/lm/builder/corpus_count.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/builder/lm/builder/corpus_count.hh
 lm/common/compare.hh
-/home/jeremie/dev/kenlm/lm/builder/lm/common/compare.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/builder/lm/common/compare.hh
 util/stream/chain.hh
-/home/jeremie/dev/kenlm/lm/builder/util/stream/chain.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/builder/util/stream/chain.hh
 util/stream/io.hh
-/home/jeremie/dev/kenlm/lm/builder/util/stream/io.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/builder/util/stream/io.hh
 util/stream/sort.hh
-/home/jeremie/dev/kenlm/lm/builder/util/stream/sort.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/builder/util/stream/sort.hh
 util/file.hh
-/home/jeremie/dev/kenlm/lm/builder/util/file.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/builder/util/file.hh
 util/file_piece.hh
-/home/jeremie/dev/kenlm/lm/builder/util/file_piece.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/builder/util/file_piece.hh
 util/usage.hh
-/home/jeremie/dev/kenlm/lm/builder/util/usage.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/builder/util/usage.hh
 boost/program_options.hpp
 -
 string

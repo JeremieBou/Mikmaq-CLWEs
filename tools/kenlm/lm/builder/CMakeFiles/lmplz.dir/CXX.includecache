@@ -1,4 +1,4 @@
-#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
 
 #IncludeRegexScan: ^.*$
 
@@ -286,21 +286,21 @@ string
 stdint.h
 -
 
-/home/jeremie/dev/kenlm/lm/builder/lmplz_main.cc
+/home/jeremie/dev/kenlm2/kenlm/lm/builder/lmplz_main.cc
 lm/builder/output.hh
-/home/jeremie/dev/kenlm/lm/builder/lm/builder/output.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/builder/lm/builder/output.hh
 lm/builder/pipeline.hh
-/home/jeremie/dev/kenlm/lm/builder/lm/builder/pipeline.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/builder/lm/builder/pipeline.hh
 lm/common/size_option.hh
-/home/jeremie/dev/kenlm/lm/builder/lm/common/size_option.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/builder/lm/common/size_option.hh
 lm/lm_exception.hh
-/home/jeremie/dev/kenlm/lm/builder/lm/lm_exception.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/builder/lm/lm_exception.hh
 util/file.hh
-/home/jeremie/dev/kenlm/lm/builder/util/file.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/builder/util/file.hh
 util/file_piece.hh
-/home/jeremie/dev/kenlm/lm/builder/util/file_piece.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/builder/util/file_piece.hh
 util/usage.hh
-/home/jeremie/dev/kenlm/lm/builder/util/usage.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/builder/util/usage.hh
 iostream
 -
 boost/program_options.hpp

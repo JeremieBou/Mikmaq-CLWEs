@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/jeremie/dev/kenlm/lm/filter/phrase_table_vocab_main.cc" "/home/jeremie/dev/kenlm/build/lm/filter/CMakeFiles/phrase_table_vocab.dir/phrase_table_vocab_main.cc.o"
+  "/home/jeremie/dev/kenlm2/kenlm/lm/filter/phrase_table_vocab_main.cc" "/home/jeremie/dev/kenlm2/kenlm/build/lm/filter/CMakeFiles/phrase_table_vocab.dir/phrase_table_vocab_main.cc.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
@@ -20,9 +20,9 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
 
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
-  "/home/jeremie/dev/kenlm/build/lm/filter/CMakeFiles/kenlm_filter.dir/DependInfo.cmake"
-  "/home/jeremie/dev/kenlm/build/lm/CMakeFiles/kenlm.dir/DependInfo.cmake"
-  "/home/jeremie/dev/kenlm/build/util/CMakeFiles/kenlm_util.dir/DependInfo.cmake"
+  "/home/jeremie/dev/kenlm2/kenlm/build/lm/filter/CMakeFiles/kenlm_filter.dir/DependInfo.cmake"
+  "/home/jeremie/dev/kenlm2/kenlm/build/lm/CMakeFiles/kenlm.dir/DependInfo.cmake"
+  "/home/jeremie/dev/kenlm2/kenlm/build/util/CMakeFiles/kenlm_util.dir/DependInfo.cmake"
   )
 
 # Fortran module output directory.

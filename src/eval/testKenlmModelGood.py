@@ -8,7 +8,7 @@ try:
     do_adj = sys.argv[3] == 'adj'
 except IndexError:
     do_adj = False
-
+ 
 model = kenlm.LanguageModel(myModelFile)
 tests = open(testFile).readlines()
 

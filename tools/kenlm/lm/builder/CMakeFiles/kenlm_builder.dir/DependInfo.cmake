@@ -4,12 +4,12 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/jeremie/dev/kenlm/lm/builder/adjust_counts.cc" "/home/jeremie/dev/kenlm/build/lm/builder/CMakeFiles/kenlm_builder.dir/adjust_counts.cc.o"
-  "/home/jeremie/dev/kenlm/lm/builder/corpus_count.cc" "/home/jeremie/dev/kenlm/build/lm/builder/CMakeFiles/kenlm_builder.dir/corpus_count.cc.o"
-  "/home/jeremie/dev/kenlm/lm/builder/initial_probabilities.cc" "/home/jeremie/dev/kenlm/build/lm/builder/CMakeFiles/kenlm_builder.dir/initial_probabilities.cc.o"
-  "/home/jeremie/dev/kenlm/lm/builder/interpolate.cc" "/home/jeremie/dev/kenlm/build/lm/builder/CMakeFiles/kenlm_builder.dir/interpolate.cc.o"
-  "/home/jeremie/dev/kenlm/lm/builder/output.cc" "/home/jeremie/dev/kenlm/build/lm/builder/CMakeFiles/kenlm_builder.dir/output.cc.o"
-  "/home/jeremie/dev/kenlm/lm/builder/pipeline.cc" "/home/jeremie/dev/kenlm/build/lm/builder/CMakeFiles/kenlm_builder.dir/pipeline.cc.o"
+  "/home/jeremie/dev/kenlm2/kenlm/lm/builder/adjust_counts.cc" "/home/jeremie/dev/kenlm2/kenlm/build/lm/builder/CMakeFiles/kenlm_builder.dir/adjust_counts.cc.o"
+  "/home/jeremie/dev/kenlm2/kenlm/lm/builder/corpus_count.cc" "/home/jeremie/dev/kenlm2/kenlm/build/lm/builder/CMakeFiles/kenlm_builder.dir/corpus_count.cc.o"
+  "/home/jeremie/dev/kenlm2/kenlm/lm/builder/initial_probabilities.cc" "/home/jeremie/dev/kenlm2/kenlm/build/lm/builder/CMakeFiles/kenlm_builder.dir/initial_probabilities.cc.o"
+  "/home/jeremie/dev/kenlm2/kenlm/lm/builder/interpolate.cc" "/home/jeremie/dev/kenlm2/kenlm/build/lm/builder/CMakeFiles/kenlm_builder.dir/interpolate.cc.o"
+  "/home/jeremie/dev/kenlm2/kenlm/lm/builder/output.cc" "/home/jeremie/dev/kenlm2/kenlm/build/lm/builder/CMakeFiles/kenlm_builder.dir/output.cc.o"
+  "/home/jeremie/dev/kenlm2/kenlm/lm/builder/pipeline.cc" "/home/jeremie/dev/kenlm2/kenlm/build/lm/builder/CMakeFiles/kenlm_builder.dir/pipeline.cc.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
@@ -25,8 +25,8 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
 
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
-  "/home/jeremie/dev/kenlm/build/lm/CMakeFiles/kenlm.dir/DependInfo.cmake"
-  "/home/jeremie/dev/kenlm/build/util/CMakeFiles/kenlm_util.dir/DependInfo.cmake"
+  "/home/jeremie/dev/kenlm2/kenlm/build/lm/CMakeFiles/kenlm.dir/DependInfo.cmake"
+  "/home/jeremie/dev/kenlm2/kenlm/build/util/CMakeFiles/kenlm_util.dir/DependInfo.cmake"
   )
 
 # Fortran module output directory.

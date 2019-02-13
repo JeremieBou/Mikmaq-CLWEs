@@ -1,4 +1,4 @@
-#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
 
 #IncludeRegexScan: ^.*$
 
@@ -16,9 +16,9 @@ cassert
 stdint.h
 -
 
-/home/jeremie/dev/kenlm/util/sorted_uniform_test.cc
+/home/jeremie/dev/kenlm2/kenlm/util/sorted_uniform_test.cc
 util/sorted_uniform.hh
-/home/jeremie/dev/kenlm/util/util/sorted_uniform.hh
+/home/jeremie/dev/kenlm2/kenlm/util/util/sorted_uniform.hh
 boost/random/mersenne_twister.hpp
 -
 boost/random/uniform_int.hpp

@@ -1,4 +1,4 @@
-#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
 
 #IncludeRegexScan: ^.*$
 
@@ -228,15 +228,15 @@ cassert
 string
 -
 
-/home/jeremie/dev/kenlm/lm/builder/adjust_counts_test.cc
+/home/jeremie/dev/kenlm2/kenlm/lm/builder/adjust_counts_test.cc
 lm/builder/adjust_counts.hh
-/home/jeremie/dev/kenlm/lm/builder/lm/builder/adjust_counts.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/builder/lm/builder/adjust_counts.hh
 lm/common/ngram_stream.hh
-/home/jeremie/dev/kenlm/lm/builder/lm/common/ngram_stream.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/builder/lm/common/ngram_stream.hh
 lm/builder/payload.hh
-/home/jeremie/dev/kenlm/lm/builder/lm/builder/payload.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/builder/lm/builder/payload.hh
 util/scoped.hh
-/home/jeremie/dev/kenlm/lm/builder/util/scoped.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/builder/util/scoped.hh
 boost/thread/thread.hpp
 -
 boost/test/unit_test.hpp

@@ -1,4 +1,4 @@
-#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
 
 #IncludeRegexScan: ^.*$
 
@@ -564,19 +564,19 @@ string
 stdint.h
 -
 
-/home/jeremie/dev/kenlm/lm/kenlm_benchmark_main.cc
+/home/jeremie/dev/kenlm2/kenlm/lm/kenlm_benchmark_main.cc
 lm/model.hh
-/home/jeremie/dev/kenlm/lm/lm/model.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/lm/model.hh
 util/file_stream.hh
-/home/jeremie/dev/kenlm/lm/util/file_stream.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/util/file_stream.hh
 util/file.hh
-/home/jeremie/dev/kenlm/lm/util/file.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/util/file.hh
 util/file_piece.hh
-/home/jeremie/dev/kenlm/lm/util/file_piece.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/util/file_piece.hh
 util/usage.hh
-/home/jeremie/dev/kenlm/lm/util/usage.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/util/usage.hh
 util/thread_pool.hh
-/home/jeremie/dev/kenlm/lm/util/thread_pool.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/util/thread_pool.hh
 boost/range/iterator_range.hpp
 -
 boost/program_options.hpp

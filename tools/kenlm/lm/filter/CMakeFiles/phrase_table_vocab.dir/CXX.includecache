@@ -1,4 +1,4 @@
-#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
 
 #IncludeRegexScan: ^.*$
 
@@ -208,21 +208,21 @@ algorithm
 cstring
 -
 
-/home/jeremie/dev/kenlm/lm/filter/phrase_table_vocab_main.cc
+/home/jeremie/dev/kenlm2/kenlm/lm/filter/phrase_table_vocab_main.cc
 util/file_stream.hh
-/home/jeremie/dev/kenlm/lm/filter/util/file_stream.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/filter/util/file_stream.hh
 util/file_piece.hh
-/home/jeremie/dev/kenlm/lm/filter/util/file_piece.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/filter/util/file_piece.hh
 util/murmur_hash.hh
-/home/jeremie/dev/kenlm/lm/filter/util/murmur_hash.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/filter/util/murmur_hash.hh
 util/pool.hh
-/home/jeremie/dev/kenlm/lm/filter/util/pool.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/filter/util/pool.hh
 util/string_piece.hh
-/home/jeremie/dev/kenlm/lm/filter/util/string_piece.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/filter/util/string_piece.hh
 util/string_piece_hash.hh
-/home/jeremie/dev/kenlm/lm/filter/util/string_piece_hash.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/filter/util/string_piece_hash.hh
 util/tokenize_piece.hh
-/home/jeremie/dev/kenlm/lm/filter/util/tokenize_piece.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/filter/util/tokenize_piece.hh
 boost/unordered_map.hpp
 -
 boost/unordered_set.hpp

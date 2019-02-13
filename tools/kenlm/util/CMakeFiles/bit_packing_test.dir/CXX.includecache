@@ -1,4 +1,4 @@
-#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
 
 #IncludeRegexScan: ^.*$
 
@@ -20,9 +20,9 @@ stdint.h
 cstring
 -
 
-/home/jeremie/dev/kenlm/util/bit_packing_test.cc
+/home/jeremie/dev/kenlm2/kenlm/util/bit_packing_test.cc
 util/bit_packing.hh
-/home/jeremie/dev/kenlm/util/util/bit_packing.hh
+/home/jeremie/dev/kenlm2/kenlm/util/util/bit_packing.hh
 boost/test/unit_test.hpp
 -
 cstring

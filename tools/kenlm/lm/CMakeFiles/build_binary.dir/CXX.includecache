@@ -1,4 +1,4 @@
-#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
 
 #IncludeRegexScan: ^.*$
 
@@ -538,15 +538,15 @@ string
 stdint.h
 -
 
-/home/jeremie/dev/kenlm/lm/build_binary_main.cc
+/home/jeremie/dev/kenlm2/kenlm/lm/build_binary_main.cc
 lm/model.hh
-/home/jeremie/dev/kenlm/lm/lm/model.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/lm/model.hh
 lm/sizes.hh
-/home/jeremie/dev/kenlm/lm/lm/sizes.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/lm/sizes.hh
 util/file_piece.hh
-/home/jeremie/dev/kenlm/lm/util/file_piece.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/util/file_piece.hh
 util/usage.hh
-/home/jeremie/dev/kenlm/lm/util/usage.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/util/usage.hh
 algorithm
 -
 cstdlib
@@ -562,7 +562,7 @@ limits
 cmath
 -
 util/getopt.hh
-/home/jeremie/dev/kenlm/lm/util/getopt.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/util/getopt.hh
 unistd.h
 -
 

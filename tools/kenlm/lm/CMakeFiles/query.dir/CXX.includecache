@@ -1,4 +1,4 @@
-#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
 
 #IncludeRegexScan: ^.*$
 
@@ -562,13 +562,13 @@ string
 stdint.h
 -
 
-/home/jeremie/dev/kenlm/lm/query_main.cc
+/home/jeremie/dev/kenlm2/kenlm/lm/query_main.cc
 lm/ngram_query.hh
-/home/jeremie/dev/kenlm/lm/lm/ngram_query.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/lm/ngram_query.hh
 util/getopt.hh
-/home/jeremie/dev/kenlm/lm/util/getopt.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/util/getopt.hh
 lm/wrappers/nplm.hh
-/home/jeremie/dev/kenlm/lm/lm/wrappers/nplm.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/lm/wrappers/nplm.hh
 stdlib.h
 -
 

@@ -1,4 +1,4 @@
-#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
 
 #IncludeRegexScan: ^.*$
 
@@ -554,15 +554,15 @@ algorithm
 cstring
 -
 
-/home/jeremie/dev/kenlm/lm/partial_test.cc
+/home/jeremie/dev/kenlm2/kenlm/lm/partial_test.cc
 lm/partial.hh
-/home/jeremie/dev/kenlm/lm/lm/partial.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/lm/partial.hh
 lm/left.hh
-/home/jeremie/dev/kenlm/lm/lm/left.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/lm/left.hh
 lm/model.hh
-/home/jeremie/dev/kenlm/lm/lm/model.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/lm/model.hh
 util/tokenize_piece.hh
-/home/jeremie/dev/kenlm/lm/util/tokenize_piece.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/util/tokenize_piece.hh
 boost/test/unit_test.hpp
 -
 boost/test/floating_point_comparison.hpp

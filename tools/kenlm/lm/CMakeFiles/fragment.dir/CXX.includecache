@@ -1,4 +1,4 @@
-#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
 
 #IncludeRegexScan: ^.*$
 
@@ -544,13 +544,13 @@ algorithm
 cstring
 -
 
-/home/jeremie/dev/kenlm/lm/fragment_main.cc
+/home/jeremie/dev/kenlm2/kenlm/lm/fragment_main.cc
 lm/binary_format.hh
-/home/jeremie/dev/kenlm/lm/lm/binary_format.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/lm/binary_format.hh
 lm/model.hh
-/home/jeremie/dev/kenlm/lm/lm/model.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/lm/model.hh
 lm/left.hh
-/home/jeremie/dev/kenlm/lm/lm/left.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/lm/left.hh
 util/tokenize_piece.hh
-/home/jeremie/dev/kenlm/lm/util/tokenize_piece.hh
+/home/jeremie/dev/kenlm2/kenlm/lm/util/tokenize_piece.hh
 
