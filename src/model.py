@@ -158,6 +158,7 @@ class RNNModel(nn.Module):
         for english, micmac in lexicon.items():
             i = vocab.word2idx.get(micmac, -1)
             if i >= 0:
+                matches += 1
                 self.encoder.weight.data[i] \
                             = torch.FloatTensor(model.get_word_vector(english))
 

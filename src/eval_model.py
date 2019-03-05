@@ -71,6 +71,7 @@ with torch.no_grad():
         output_flat = output_t.view(-1, ntokens)
 
 
+
         base = 0
 
         for i, word in enumerate(targets_flat):
