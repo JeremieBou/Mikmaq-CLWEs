@@ -71,7 +71,6 @@ parser.add_argument('--fasttext_epochs', type=input, default=5,
                     help='max loops over dataset to perform')
 
 
-
 parser.add_argument('--use_clwe', action='store_true',
                     help='initialize embeddings layers using cross-lingual word embeddigs')
 parser.add_argument('--clwe_method', type=str, default='CLWE',
@@ -120,7 +119,7 @@ elif args.use_fasttext:
     if embedding_exists:
         em_model = fastText.load_model(args.fasttext_save + '.bin')
     else:
-        em_model = fastText.train_unsupervised(args.data + 'train.txt',
+        em_model = fastText.train_unsupervised(args.data + '/train.txt',
                                                model=args.embedding_model.lower(),
                                                dim=args.emsize,
                                                maxn=args.fasttext_maxn,

@@ -74,7 +74,7 @@ class RNNModel(nn.Module):
                     elif clwe_method == "RAND_TRANS":
                         self.init_clwe_randtrans(embeddings, vocab, panlex.lexicon)
                     elif clwe_method == "RAND_COMBO":
-                        self.init_clwe_randtrans(embeddings, vocab, panlex.lexicon)
+                        self.init_clwe_rand(embeddings, vocab, panlex.lexicon)
                         self.init_clwe_simple(embeddings, vocab, panlex.lexicon)
                     elif clwe_method == "DUONG":
                         self.init_duong(embeddings, vocab)
@@ -89,7 +89,7 @@ class RNNModel(nn.Module):
             val = 1/(2 * tensor.shape[0])
             init.uniform_(tensor, a=-val, b=val)
         elif init_type == 'default_uniform':
-            val = 1/math.sqrt(tensor.shape[0])
+            val = 0.1
             init.uniform_(tensor, a=-val, b=val)
         elif init_type == 'xavier':
             init.xavier_uniform_(tensor)
@@ -173,7 +173,6 @@ class RNNModel(nn.Module):
             i = vocab.word2idx.get(micmac, -1)
             if i >= 0:
                 english_word = words[randint(0, len(words))]
-
                 self.encoder.weight.data[i] \
                             = torch.FloatTensor(model.get_word_vector(english_word))
 
