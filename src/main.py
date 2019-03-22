@@ -1,5 +1,6 @@
 # coding: utf-8
 import argparse
+import sys
 import time
 import math
 import os
@@ -75,9 +76,14 @@ parser.add_argument('--use_clwe', action='store_true',
                     help='initialize embeddings layers using cross-lingual word embeddigs')
 parser.add_argument('--clwe_method', type=str, default='CLWE',
                     help='clwe method to use embedding model (SIMPLE, DUONG, RAND, RAND_TRANS, RAND_COMBO)')
+parser.add_argument('--clwe_concat',  action='store_true',
+                    help='if true, it will concatenate CLWEs with Fasttext embeddings, you must specifc fasttext parameters')
+parser.add_argument('--clwe_save', type=str, default='CLWE',
+                    help='path of the clwe model')
 parser.add_argument('--panlex_loc', type=str, default='lexicon',
                     help='path of the panlex lexicon formated from the fasttext embedding language to the target')
-
+parser.add_argument('--panlex_dist', type=int, default=0,
+                    help='Accpetable edit distance for a panlex match')
 
 parser.add_argument('--save', type=str, default='model.pt',
                     help='path to save the final model')
@@ -100,22 +106,35 @@ device = torch.device("cuda" if args.cuda else "cpu")
 corpus = data.Corpus(args.data)
 panlex = False
 
-if os.path.isfile(args.fasttext_save + '.vec') or \
-        (os.path.isfile(args.fasttext_save) and args.fasttext_save[-4:] == '.emb'):
-    embedding_exists = True
-else:
-    embedding_exists = False
+
+em_model = None
+clwe_model = None
 
 if args.use_clwe:
-    if embedding_exists:
+    clwe_exist = False
+
+    if (os.path.isfile(args.clwe_save) and args.clwe_save[-4:] == '.emb') or\
+            os.path.isfile(args.clwe_save + '.vec'):
+        clwe_exist = True
+
+    if not args.panlex_loc:
+        raise Exception("Please specify a lexicon using --panlex_loc")
+
+    if clwe_exist:
         if args.clwe_method == "DUONG":
-            em_model = KeyedVectors.load_word2vec_format(args.fasttext_save)
+            clwe_model = KeyedVectors.load_word2vec_format(args.clwe_save)
         else:
-            em_model = fastText.load_model(args.fasttext_save + '.bin')
-        panlex = data.Panlex(args.panlex_loc)
+            clwe_model = fastText.load_model(args.clwe_save + '.bin')
+        panlex = data.Panlex(args.panlex_loc, acceptable_dist=args.panlex_dist)
     else:
-        print("Please specify english or duong word embeddigs using the --fasttext_save parameter")
-elif args.use_fasttext:
+        raise Exception("Please specify english or duong word embeddigs using the \
+                --clwe_save parameter (given file might not exist)")
+
+if args.use_fasttext:
+    embedding_exists = False
+    if os.path.isfile(args.fasttext_save + '.vec'):
+        embedding_exists = True
+
     if embedding_exists:
         em_model = fastText.load_model(args.fasttext_save + '.bin')
     else:
@@ -126,8 +145,7 @@ elif args.use_fasttext:
                                                epoch=args.fasttext_epochs)
         em_model.save_model(args.fasttext_save + '.bin')
 
-else:
-    em_model = None
+
 
 
 # Starting from sequential data, batchify arranges the dataset into columns.
@@ -170,7 +188,9 @@ model = model.RNNModel(args.model,
                         args.tied,
                         embeddings=em_model,
                         panlex=panlex,
+                        cl_embeddings=clwe_model,
                         clwe_method=args.clwe_method,
+                        clwe_concat=args.clwe_concat,
                         vocab=corpus.dictionary,
                         init_method=[
                             args.hin_weights,

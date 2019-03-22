@@ -2,13 +2,15 @@ import re
 import os
 import torch
 
+from editdistance import eval
+
 class Dictionary(object):
     def __init__(self):
         self.word2idx = {}
         self.idx2word = []
         self.word2freq = {}
 
-    def add_word(self, word):        
+    def add_word(self, word):
         if word not in self.word2idx:
             self.idx2word.append(word)
             self.word2idx[word] = len(self.idx2word) - 1
@@ -57,18 +59,45 @@ class Corpus(object):
         return ids, sentences, types
 
 class Panlex(object):
-    def __init__(self, lexicon_location):
-        self.lexicon = self.read_lexicon(lexicon_location)
+    def __init__(self, lexicon_location, acceptable_dist=0):
+        self.lexicon, self.inverted_lexicon = self.read_lexicon(lexicon_location)
+
+        self.acceptable_dist = acceptable_dist
+
+    def get(self, target=None, source=None):
+        if source:
+            closest = self.inverted_lexicon.get(source)
+            closest_dist = -1
+
+            if not closest and self.acceptable_dist > 0:
+                for t, s in self.lexicon.items():
+                    distance = eval(source, s)
+                    if closest_dist < 0 or distance < closest_dist:
+                        closest = t
+                        closest_dist = distance
+
+            if closest_dist <= self.acceptable_dist:
+                return closest
+            else:
+                return None
+        elif target:
+            return self.lexicon.get(target)
+        else:
+            return None
 
     def read_lexicon(self, path):
         lexicon = {}
+        inverted_lexicon = {}
 
         with open(path, 'r', encoding="utf8") as f:
             for line in f:
                 # match duong's lexicon format, group 1 is feeder lang
                 # and group 2 is target lang
-                words = re.search('[a-z]{3}_(.+)\t\t[a-z]{3}_(.+)', line)
+                words = re.search('[a-z]{2}_(.+)\t[a-z]{2}_(.+)', line)
+
                 if words.group(1) != '<UNK>' and words.group(2) != '<UNK>':
                     lexicon[words.group(1)] = words.group(2)
+                    inverted_lexicon[words.group(2)] = words.group(1)
 
-        return lexicon
+
+        return lexicon, inverted_lexicon

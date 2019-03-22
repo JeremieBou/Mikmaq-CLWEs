@@ -13,7 +13,9 @@ class RNNModel(nn.Module):
                     tie_weights=False,
                     embeddings=None,
                     panlex=None,
+                    cl_embeddings=None,
                     clwe_method="SIMPLE",
+                    clwe_concat=False,
                     vocab=None,
                     init_method=[
                         'fixed_uniform',
@@ -24,6 +26,22 @@ class RNNModel(nn.Module):
                         'fixed_uniform'
                     ]):
         super(RNNModel, self).__init__()
+
+        self.og_ninp = ninp
+
+        if clwe_concat:
+            if not embeddings:
+                raise Exception("Please include fastText embeddings to use concatenate")
+
+            ninp = 2*ninp
+            if tie_weights:
+                nhid = 2*nhid
+
+        if embeddings:
+            self.embedding_model = embeddings
+        else:
+            self.embedding_model = None
+
         self.drop = nn.Dropout(dropout)
         self.encoder = nn.Embedding(ntoken, ninp)
         if rnn_type in ['LSTM', 'GRU']:
@@ -52,7 +70,6 @@ class RNNModel(nn.Module):
         self.rnn_type = rnn_type
         self.nhid = nhid
         self.nlayers = nlayers
-
         self.init_weights(init_hinput_weights=init_method[0],
                             init_hrecurent_weights=init_method[1],
                             init_hbinput_weights=init_method[2],
@@ -61,28 +78,32 @@ class RNNModel(nn.Module):
                             init_out_weights=init_method[5])
 
         with torch.no_grad():
-            if embeddings and vocab:
-                if panlex:
+            if (self.embedding_model or cl_embeddings) and vocab:
+                if clwe_method and panlex and cl_embeddings:
                     print('Starting initializing clwe')
                     if clwe_method == "SIMPLE":
-                        self.init_clwe_simple(embeddings, vocab, panlex.lexicon)
+                        self.init_clwe_simple(cl_embeddings, vocab, panlex, concat=clwe_concat)
                     elif clwe_method == "RAND":
-                        self.init_clwe_rand(embeddings, vocab, panlex.lexicon)
+                        self.init_clwe_rand(cl_embeddings, vocab, panlex, concat=clwe_concat)
                     elif clwe_method == "RAND2":
-                        self.init_embeddings_weights(embeddings, vocab)
-                        self.init_clwe_rand(embeddings, vocab, panlex.lexicon)
+                        self.init_embeddings_weights(vocab, embeddings=cl_embeddings)
+                        self.init_clwe_rand(cl_embeddings, vocab, panlex, concat=clwe_concat)
                     elif clwe_method == "RAND_TRANS":
-                        self.init_clwe_randtrans(embeddings, vocab, panlex.lexicon)
+                        self.init_clwe_randtrans(cl_embeddings, vocab, panlex, concat=clwe_concat)
                     elif clwe_method == "RAND_COMBO":
-                        self.init_clwe_rand(embeddings, vocab, panlex.lexicon)
-                        self.init_clwe_simple(embeddings, vocab, panlex.lexicon)
+                        self.init_clwe_rand(cl_embeddings, vocab, panlex, concat=clwe_concat)
+                        self.init_clwe_simple(cl_embeddings, vocab, panlex, concat=clwe_concat)
                     elif clwe_method == "DUONG":
-                        self.init_duong(embeddings, vocab)
+                        self.init_duong(cl_embeddings, vocab)
                     print('Finished initializing clwe')
+
+
                 else:
                     print('Starting initializing embeddings')
-                    self.init_embeddings_weights(embeddings, vocab)
+                    self.init_embeddings_weights(vocab)
                     print('Finished initializing embeddings')
+
+        del self.embedding_model
 
     def init_weight(self, tensor, init_type='fixed_uniform'):
         if init_type == 'mikolov_uniform':
@@ -136,56 +157,95 @@ class RNNModel(nn.Module):
                 self.init_weight(self.decoder.weight.data, init_out_weights if init_out_weights else init_type)
                 self.decoder.bias.data.zero_()
 
-    def init_embeddings_weights(self, model, vocab):
+    def get_embeddings(self, word):
+        return self.embedding_model.get_word_vector(word)
+
+    def init_vec(self, idx, vec, vec2 = []):
+        if len(vec2) > 0:
+            x = torch.cat((torch.FloatTensor(vec), torch.FloatTensor(vec2)))
+        else:
+            x = torch.FloatTensor(vec)
+        self.encoder.weight.data[idx] = x
+
+    def init_embeddings_weights(self, vocab, embeddings=None):
         for i, word in enumerate(vocab.idx2word):
-            self.encoder.weight.data[i] = torch.FloatTensor(model.get_word_vector(word))
+            if embeddings:
+                self.init_vec(i, embeddings.get_word_vector(word))
+            else:
+                self.init_vec(i, self.get_embeddings(word))
 
 
-    def init_duong(self, model, vocab):
+    def init_duong(self, model, vocab, concat=False):
         matches = 0
         for i, word in enumerate(vocab.idx2word):
+            vec2 = []
+            if concat:
+                vec2 = self.get_embeddings(word)
+
             try:
-                x = model['mi_' + word]
-                self.encoder.weight.data[i] = torch.FloatTensor( x)#/np.linalg.norm(x)
+                embed = model['mi_' + word]#/np.linalg.norm(embed)
+                self.init_vec(i, embed, vec2)
                 matches += 1
             except KeyError:
-                pass
+                self.init_vec(i, self.encoder.weight.data[i][0:self.og_ninp], vec2)
 
         print("{} matches out of {} words".format(matches, len(vocab.idx2word)))
 
-    def init_clwe_simple(self, model, vocab, lexicon):
+    def init_clwe_simple(self, model, vocab, lexicon, concat=False):
         matches = 0
-        for english, micmac in lexicon.items():
-            i = vocab.word2idx.get(micmac, -1)
-            if i >= 0:
+        vec2 = []
+
+
+        if concat:
+            vec2 = self.get_embeddings(micmac)
+
+        for i, word in enumerate(vocab.idx2word):
+            english = lexicon.get(source=word)
+
+
+            if english:
                 matches += 1
-                self.encoder.weight.data[i] \
-                            = torch.FloatTensor(model.get_word_vector(english))
+                embed = model.get_word_vector(english)
+                self.init_vec(i, embed, vec2)
+            else:
+                self.init_vec(i, self.encoder.weight.data[i][0:self.og_ninp], vec2)
+
 
         print("{} matches out of {} words".format(matches, len(vocab.idx2word)))
 
 
 
 
-    def init_clwe_randtrans(self, model, vocab, lexicon):
+    def init_clwe_randtrans(self, model, vocab, lexicon, concat=False):
         words = model.get_words()
         for english, micmac in lexicon.items():
+            vec2 = []
+            if concat:
+                vec2 = self.get_embeddings(micmac)
+
             i = vocab.word2idx.get(micmac, -1)
             if i >= 0:
                 english_word = words[randint(0, len(words))]
-                self.encoder.weight.data[i] \
-                            = torch.FloatTensor(model.get_word_vector(english_word))
+                embed = model.get_word_vector(english_word)
+                self.init_vec(i, embed, vec2)
+            else:
+                self.init_vec(i, self.encoder.weight.data[i][0:self.og_ninp], vec2)
 
 
-    def init_clwe_rand(self, model, vocab, lexicon):
+    def init_clwe_rand(self, model, vocab, lexicon, concat=False):
         lexicon_list = list(lexicon.items())
 
         for i, word, in enumerate(vocab.idx2word):
+            vec2 = []
+            if concat:
+                vec2 = self.get_embeddings(word)
+
             j = randint(0, len(lexicon_list) - 1)
 
             entry = lexicon_list[j]
             embed = model.get_word_vector(entry[0])
-            self.encoder.weight.data[i] = torch.FloatTensor(embed)
+            self.init_vec(i, embed, vec2)
+
 
     def forward(self, input, hidden):
         emb = self.drop(self.encoder(input))
