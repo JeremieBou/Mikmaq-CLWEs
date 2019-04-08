@@ -195,13 +195,11 @@ class RNNModel(nn.Module):
         matches = 0
         vec2 = []
 
-
         if concat:
             vec2 = self.get_embeddings(micmac)
 
         for i, word in enumerate(vocab.idx2word):
-            english = lexicon.get(source=word)
-
+            english = lexicon.get(target=word)
 
             if english:
                 matches += 1
@@ -218,22 +216,23 @@ class RNNModel(nn.Module):
 
     def init_clwe_randtrans(self, model, vocab, lexicon, concat=False):
         words = model.get_words()
-        for english, micmac in lexicon.items():
-            vec2 = []
-            if concat:
-                vec2 = self.get_embeddings(micmac)
+        vec2 = []
 
-            i = vocab.word2idx.get(micmac, -1)
-            if i >= 0:
-                english_word = words[randint(0, len(words))]
-                embed = model.get_word_vector(english_word)
+
+        if concat:
+            vec2 = self.get_embeddings(micmac)
+
+        for i, word in enumerate(vocab.word2idx):
+            if lexicon.get(target=word):
+                english = words[randint(0, len(words))]
+                embed = model.get_word_vector(english)
                 self.init_vec(i, embed, vec2)
             else:
                 self.init_vec(i, self.encoder.weight.data[i][0:self.og_ninp], vec2)
 
 
     def init_clwe_rand(self, model, vocab, lexicon, concat=False):
-        lexicon_list = list(lexicon.items())
+        lexicon_list = list(lexicon.lexicon.items())
 
         for i, word, in enumerate(vocab.idx2word):
             vec2 = []

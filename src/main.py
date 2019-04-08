@@ -83,7 +83,9 @@ parser.add_argument('--clwe_save', type=str, default='CLWE',
 parser.add_argument('--panlex_loc', type=str, default='lexicon',
                     help='path of the panlex lexicon formated from the fasttext embedding language to the target')
 parser.add_argument('--panlex_dist', type=int, default=0,
-                    help='Accpetable edit distance for a panlex match')
+                    help='Acceptable edit distance for a panlex match')
+parser.add_argument('--panlex_swap_gk', action='store_true',
+                    help='make the characters g and k the same in terms of lexicon matching')
 
 parser.add_argument('--save', type=str, default='model.pt',
                     help='path to save the final model')
@@ -125,7 +127,9 @@ if args.use_clwe:
             clwe_model = KeyedVectors.load_word2vec_format(args.clwe_save)
         else:
             clwe_model = fastText.load_model(args.clwe_save + '.bin')
-        panlex = data.Panlex(args.panlex_loc, acceptable_dist=args.panlex_dist)
+        panlex = data.Panlex(args.panlex_loc,
+                             acceptable_dist=args.panlex_dist,
+                             panlex_swap_gk=args.panlex_swap_gk)
     else:
         raise Exception("Please specify english or duong word embeddigs using the \
                 --clwe_save parameter (given file might not exist)")

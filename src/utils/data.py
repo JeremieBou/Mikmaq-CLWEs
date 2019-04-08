@@ -59,29 +59,39 @@ class Corpus(object):
         return ids, sentences, types
 
 class Panlex(object):
-    def __init__(self, lexicon_location, acceptable_dist=0):
+    def __init__(self,
+                 lexicon_location,
+                 acceptable_dist=0,
+                 panlex_swap_gk=False):
+        self.panlex_swap_gk = panlex_swap_gk
         self.lexicon, self.inverted_lexicon = self.read_lexicon(lexicon_location)
 
         self.acceptable_dist = acceptable_dist
 
-    def get(self, target=None, source=None):
-        if source:
-            closest = self.inverted_lexicon.get(source)
+    def swap_gk(self, word):
+        return word.replace('g', 'k').replace("'", "")
+
+    def get(self, source=None, target=None):
+        if target:
+            if self.panlex_swap_gk:
+                target = self.swap_gk(target)
+
+            closest = self.inverted_lexicon.get(target)
             closest_dist = -1
 
             if not closest and self.acceptable_dist > 0:
-                for t, s in self.lexicon.items():
-                    distance = eval(source, s)
+                for s, t in self.lexicon.items():
+                    distance = eval(target, t)
                     if closest_dist < 0 or distance < closest_dist:
-                        closest = t
+                        closest = s
                         closest_dist = distance
 
             if closest_dist <= self.acceptable_dist:
                 return closest
             else:
                 return None
-        elif target:
-            return self.lexicon.get(target)
+        elif source:
+            return self.lexicon.get(source)
         else:
             return None
 
@@ -94,10 +104,13 @@ class Panlex(object):
                 # match duong's lexicon format, group 1 is feeder lang
                 # and group 2 is target lang
                 words = re.search('[a-z]{2}_(.+)\t[a-z]{2}_(.+)', line)
+                source, target = words.group(1), words.group(2)
+                if self.panlex_swap_gk:
+                    target = self.swap_gk(target)
 
-                if words.group(1) != '<UNK>' and words.group(2) != '<UNK>':
-                    lexicon[words.group(1)] = words.group(2)
-                    inverted_lexicon[words.group(2)] = words.group(1)
+                if source != '<UNK>' and  target != '<UNK>':
+                    lexicon[source] = target
+                    inverted_lexicon[target] = source
 
 
         return lexicon, inverted_lexicon
