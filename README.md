@@ -117,6 +117,15 @@ I put everything in the /models folder with the following structure:
 |   +-- clwe_models
 ```
 
+### RNN Parameters
+/src/main.py is the starting point for any rnn lm training. Here are the command line arguments for that:
+
+To see what the parameters are, just run
+
+```
+python src/main.py --help
+```
+
 ### Word Embeddings
 
 #### FastText
@@ -157,9 +166,63 @@ This section will be oranized in the order of the paper and will only include in
 
 #### Base RNNs
 
+**Best GRU**
+```
+!command python src/main.py \
+    --data data/transformed/micmac \
+    --model GRU \
+    --epochs=25 \
+    --log-interval 25 \
+    --lr 5 \
+    --nlayers 1 \
+    --tied \
+    --emsize 300 \
+    --nhid 300 \
+    --dropout 0.5\
+    --save models/rnns/base_models/gru_300_05.pt
+```
+
+**Best LSTM**
+```
+!command python src/main.py \
+    --data data/transformed/micmac \
+    --model LSTM \
+    --epochs=25 \
+    --log-interval 25 \
+    --lr 5 \
+    --nlayers 1 \
+    --tied \
+    --emsize 300 \
+    --nhid 300 \
+    --dropout 0.5 \
+    --save models/rnns/base_models/LSTM_300_05.pt
+```
+
 #### Init Models
 
+**Best base gru + Normal initialization**
+```
+!command python src/main.py \
+    --data data/transformed/micmac \
+    --model GRU \
+    --epochs=25 \
+    --log-interval 25 \
+    --lr 5 \
+    --nlayers 1 \
+    --tied \
+    --emsize 300 \
+    --nhid 300 \
+    --dropout 0.5\
+    --hin_weights normal \
+    --hr_weights normal \
+    --em_weights normal \
+    --out_weights normal \
+    --save models/rnns/init_models/gru_normnom.pt
+```
+
 #### FastText
+**Best GRU with skip gram initialization**
+The saved model can either be pre-trained with the above instructions, or if it is not pre-tained, the script will do it.
 
 ```
 python src/main.py \
@@ -180,6 +243,83 @@ python src/main.py \
 ```
 
 #### Direct CLWE
+*I need to put instructions for how to make Lexicons with PanLex first. The issue is that the script currently doesn't work, so I'll need to fix that first.*
+
+**Direct**
+```
+!command python src/main.py \
+    --data data/transformed/micmac \
+    --model GRU \
+    --epochs=35 \
+    --log-interval 25 \
+    --tied \
+    --nlayers 1 \
+    --lr 5 \
+    --dropout 0.5 \
+    --hin_weights normal \
+    --hr_weights normal \
+    --em_weights normal \
+    --out_weights normal \
+    --emsize 300 \
+    --nhid 300 \
+    --use_clwe \
+    --clwe_method SIMPLE \
+    --panlex_loc data/lexicon/eng-mic3.txt \
+    --clwe_save models/embeddings/wiki.en \
+    --save models/rnns/clwe_models/gru_300_clwe.pt
+```
+
+**Rand 1**
+```
+!command python src/main.py \
+    --data data/transformed/micmac \
+    --model GRU \
+    --epochs=35 \
+    --log-interval 25 \
+    --tied \
+    --nlayers 1 \
+    --lr 5 \
+    --dropout 0.5 \
+    --hin_weights normal \
+    --hr_weights normal \
+    --em_weights normal \
+    --out_weights normal \
+    --emsize 300 \
+    --nhid 300 \
+    --use_clwe \
+    --clwe_method RAND \
+    --panlex_loc data/lexicon/eng-mic3.txt \
+    --clwe_save models/embeddings/wiki.en \
+    --save models/rnns/clwe_models/gru_300_clwe_RAND.pt
+ ```
+
+**Rand 2**
+
+```
+!command python src/main.py \
+    --data data/transformed/micmac \
+    --model GRU \
+    --epochs=35 \
+    --log-interval 25 \
+    --tied \
+    --nlayers 1 \
+    --lr 5 \
+    --dropout 0.5 \
+    --hin_weights normal \
+    --hr_weights normal \
+    --em_weights normal \
+    --out_weights normal \
+    --emsize 300 \
+    --nhid 300 \
+    --use_clwe \
+    --clwe_method RAND_TRANS \
+    --panlex_loc data/lexicon/eng-mic.txt \
+    --clwe_save models/embeddings/wiki.en \
+    --save models/rnns/clwe_models/gru_300_clwe_RAND_TRANS.pt
+
+```
+
+
 
 #### Duong CLWE CLWE
 
