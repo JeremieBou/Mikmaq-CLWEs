@@ -265,7 +265,7 @@ python src/main.py \
     --use_clwe \
     --clwe_method SIMPLE \
     --panlex_loc data/lexicon/eng-mic3.txt \
-    --clwe_save models/embeddings/wiki.en \
+    --clwe_save models/embeddings/English/wiki.en \
     --save models/rnns/clwe_models/gru_300_clwe.pt
 ```
 
@@ -289,7 +289,7 @@ python src/main.py \
     --use_clwe \
     --clwe_method RAND \
     --panlex_loc data/lexicon/eng-mic3.txt \
-    --clwe_save models/embeddings/wiki.en \
+    --clwe_save models/embeddings/English/wiki.en \
     --save models/rnns/clwe_models/gru_300_clwe_RAND.pt
  ```
 
@@ -314,7 +314,7 @@ python src/main.py \
     --use_clwe \
     --clwe_method RAND_TRANS \
     --panlex_loc data/lexicon/eng-mic.txt \
-    --clwe_save models/embeddings/wiki.en \
+    --clwe_save models/embeddings/English/wiki.en \
     --save models/rnns/clwe_models/gru_300_clwe_RAND_TRANS.pt
 
 ```
