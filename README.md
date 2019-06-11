@@ -93,10 +93,17 @@ python src/data/transform_data.py data/raw/micmac/test.txt > data/transformed/mi
 #### Lexicon Data
 Lexicons are used to make CLWEs
 
-TODO
+TODO: fix the script that generates it. Contact me if you need the file.
 
 #### Duong et al. Data
-We need samples of English wikipedia to make Duong et al. embeddings
+TODO
+
+```
+wget https://dumps.wikimedia.org/enwiki/latest/enwiki-latest-pages-articles.xml.bz2
+```
+
+
+
 
 ## Models
 This section assumes you put your compiled fasttext, kenlm, and XlingualEmb
@@ -157,7 +164,26 @@ You can download sized 300 embeddings trained on English (and 293 other language
 If you desire a different size or paramaters, the instructions on how to create these English embeddings are [here](https://fasttext.cc/docs/en/unsupervised-tutorial.html). This takes a long time, and if you can easily get access to a machine with a high number of CPUs do it (e.g. aws ec2 spot instances). Otherwise, you might have to wait overnight.
 
 #### Duong Embeddings
-todo
+A package to train CWLEs as proposed by Duong et al. is available [here](https://github.com/longdt219/XlingualEmb). I already have a version built into /tools/XlingualEmb.
+
+To generate Duong CLWEs you need:
+- A source-target lexicon (e.g. Enligsh - Mi'kmaq). With one entry per line. Every word is preceded by the language and an underscore (for example: banana -> en_banana).
+- A shuffled sampled of each language combined in the same file (some lines are in each language, but totally random order). Every word is preceded by the language and an underscore (for example: banana -> en_banana).
+
+For my exploration, I tested two sizes of English data, one file with 200k lines and one with 5M lines. The following will generate both embedding models. We will be using the output .emb file. Quick note: this seems very resource intensive and not very "smart", so a lot of times it was hard to do anything else on the computer while it ran. Just run it over night, and it'll be ok (it's not extremly slow, but not fast either since the first needs to go through 5M lines).
+
+
+```
+./xlingemb -train data/duong_data/en5mil_duong.txt -output models/embeddings/Duong/en.mi.5mil.word.emb -size 300 -window 48 -iter 15 
+-negative 25 -sample 0.0001 -alpha 0.025 -cbow 1 -threads 5 -dict data/lexicon/eng-mic.txt 
+-outputn models/embeddings/Duong/en.mi.5mil.context.emb -reg 0.01
+```
+
+```
+./xlingemb -train data/duong_data/en200k_duong.txt -output models/embeddings/Duong/en.mi.200k.word.emb -size 300 -window 48 -iter 15 
+-negative 25 -sample 0.0001 -alpha 0.025 -cbow 1 -threads 5 -dict data/lexicon/eng-mic.txt 
+-outputn models/embeddings/Duong/en.mi.200k.context.emb -reg 0.01
+```
 
 ### Language Models
 This section will be oranized in the order of the paper and will only include instructions to reproduce the best models in each sections. (A list of parameters will be included, which will help reproduce the rest).
@@ -322,7 +348,7 @@ python src/main.py \
 
 
 #### Duong CLWE CLWE
-
+TODO
 
 ## Evaluation
 
