@@ -189,6 +189,17 @@ For my exploration, I tested two sizes of English data, one file with 200k lines
 This section will be oranized in the order of the paper and will only include instructions to reproduce the best models in each sections. (A list of parameters will be included, which will help reproduce the rest).
 
 #### KenLM
+KenLm is trained in two steps:
+
+First train KenLM, set the 'o' parameter to the n-gram order (in this case 2 means 2-gram). KenLm works with orders from 2 to 6.
+
+```
+./tools/kenlm/bin/lmplz -o 2 --skip_symbols < data/transformed/micmac/train.txt  > models/kenlm/klm_mm_2.arpa 
+```
+Then convert the model into binary format
+```
+!command ./tools/kenlm/bin/build_binary models/kenlm/klm_mm_2.arpa models/kenlm/klm_mm_2.bin
+```
 
 #### Base RNNs
 
@@ -348,16 +359,192 @@ python src/main.py \
 
 
 #### Duong CLWE CLWE
-TODO
+Set "clwe_save" to the Duong embeddings generated earlier,
+```
+!command python src/main.py \
+    --data data/transformed/micmac \
+    --model GRU \
+    --epochs=35 \
+    --log-interval 25 \
+    --tied \
+    --nlayers 1 \
+    --lr 5 \
+    --dropout 0.5 \
+    --hin_weights normal \
+    --hr_weights normal \
+    --em_weights normal \
+    --out_weights normal \
+    --emsize 300 \
+    --nhid 300 \
+    --use_clwe \
+    --clwe_method DUONG \
+    --panlex_loc dataa/lexicon/eng-mic.txt \
+    --clwe_save models/embeddings/Duong/en.mi.5mil.word.emb \
+    --save models/rnns/clwe_models/gru_300_clwe_DUONG_5m.pt
+```
+
+#### Extra models
+We tested a few variations of the direct CLWEs to see if they worked.
+
+The first is a concatenation. We use both FastText and direct CLWEs to initialize the models. We essentially take a 300 sized vector for each and make a 600 sized vector.
+
+```
+
+!command python src/main.py \
+    --data data/transformed/micmac \
+    --model GRU \
+    --epochs=35 \
+    --log-interval 25 \
+    --tied \
+    --nlayers 1 \
+    --lr 5 \
+    --dropout 0.5 \
+    --hin_weights normal \
+    --hr_weights normal \
+    --em_weights normal \
+    --out_weights normal \
+    --emsize 300 \
+    --nhid 300 \
+    --use_clwe \
+    --clwe_method SIMPLE \
+    --clwe_concat \
+    --use_fasttext\
+    --embedding_model SKIPGRAM \
+    --fasttext_save models/embeddings/FastText/skipgram300 \
+    --panlex_loc data/lexicon/eng-mic3.txt \
+    --clwe_save models/embeddings/English/wiki.en \
+    --save models/rnns/init_models/gru_300_clwe_concat.pt
+```
+
+We then tested using edit distance for lexicon matches to allow a more matches. So an edit distance of 1 would allow a word to match the lexicon if 1 character was wrong.
+
+```
+!command python src/main.py \
+    --data data/transformed/micmac \
+    --model GRU \
+    --epochs=35 \
+    --log-interval 25 \
+    --tied \
+    --nlayers 1 \
+    --lr 5 \
+    --dropout 0.5 \
+    --hin_weights normal \
+    --hr_weights normal \
+    --em_weights normal \
+    --out_weights normal \
+    --emsize 300 \
+    --nhid 300 \
+    --use_clwe \
+    --clwe_method SIMPLE \
+    --panlex_loc data/lexicon/eng-mic.txt \
+    --panlex_dist 1 \
+    --clwe_save models/English/embeddings/wiki.en \
+    --save models/rnns/init_models/gru_300_clwe_dist1.pt
+```
+
+We then tested making the 'g' character and the 'k' characters equivalent to allow even more matches.
+
+```
+!command python src/main.py \
+    --data data/transformed/micmac \
+    --model GRU \
+    --epochs=35 \
+    --log-interval 25 \
+    --tied \
+    --nlayers 1 \
+    --lr 5 \
+    --dropout 0.5 \
+    --hin_weights normal \
+    --hr_weights normal \
+    --em_weights normal \
+    --out_weights normal \
+    --emsize 300 \
+    --nhid 300 \
+    --use_clwe \
+    --clwe_method SIMPLE \
+    --panlex_loc data/lexicon/eng-mic.txt \
+    --panlex_swap_gk \
+    --clwe_save models/English/embeddings/wiki.en \
+    --save models/rnns/init_models/gru_300_clwe_gk.pt
+```
+
+We also combined GK swap and edit distance
+
+```
+!command python src/main.py \
+    --data data/transformed/micmac \
+    --model GRU \
+    --epochs=35 \
+    --log-interval 25 \
+    --tied \
+    --nlayers 1 \
+    --lr 5 \
+    --dropout 0.5 \
+    --hin_weights normal \
+    --hr_weights normal \
+    --em_weights normal \
+    --out_weights normal \
+    --emsize 300 \
+    --nhid 300 \
+    --use_clwe \
+    --clwe_method SIMPLE \
+    --panlex_loc data/lexicon/eng-mic.txt \
+    --panlex_swap_gk \    
+    --panlex_dist 1 \
+    --clwe_save models/English/embeddings/wiki.en \
+    --save models/rnns/init_models/gru_300_clwe_gk_edit1.pt
+```
 
 ## Evaluation
+PyTorch and Kenlm both have perplexity calculations built in, but they don't quite seem equal. Instead we extracted the probabilities from the models to manually calculate the perplexities. This also allows us to calculate adjusted perplexity instead of the regular perplexity. Additionally, we can easily use these probabilities to calculate interpolated performance if we wish to do so.
+
+At each step we'll first generate the probabilities files, which I'll store in data/eval_out/, and then we'll calculate the performance.
+
+### Evaluating KenLM
+The following command generates the probabilities with the extra UNK information used to calculate adjusted perplexity. If you don't care about adjusted, just remove the 'adj' parameter.
+```
+python src/eval/kenLMProbs.py models/kenlm/klm_mm_2.bin data/transformed/micmac/test.txt adj \
+            > data/eval_out/kenlm/klm_02_mm_adj.txt
+```
+The perplexity_adj script will calculate the perplexity and adjusted perplexity. Make sure to include the 'adj' command in the previous command if you want adjusted perplexity.
+```
+python src/eval/perplexity_adj.py data/eval_out/kenlm/klm_02_mm_adj.txt 
+```
+
+### Evaluating PyTorch
+Adjusted perplexity doesn't quite matter for PyTorch because it doesn't give probabilities to UNK, and the following scripts give a result that is very close to what the PyTorch package gives during evaluation. Never the less, it's ran to be consistent.
+
+First generate the probabilities:
+
+```
+python src/eval_model.py --model models/rnns/base_models/gru_300_05.pt --data data/transformed/micmac > data/eval_out/gru_300_05.txt 
+```
+
+Then use the same perplexity script:
+```
+python src/eval/perplexity_adj.py data/eval_out/mm_gru_200_1_5_tied.txt 
+```
+
+###interpolation
+The following script is included to generate interpolated probabilities:
+```
+python src/eval/interpolate data/eval_out/gru_300_05.txt data/eval_out/kenlm/klm_02_mm_adj.txt 
+```
+
 
 ## Extra Analysis
 
+/src/utils/corpus_diff.py generates the type token table in section 3.1 and some other metrics used around the paper.
 
+/src/utils/data.py is a utility used by model.py, it can be useful for corpus calculations
 
+/src/utils/edit_distance.py is used to perform the edit distance calculations. It's super slow, but we needed a custom script to perform the GK edit distance.
 
+/src/utils/generate.py was included with the pytorch example
 
+/src/utils/lexiconmatches.py calculates the number of lexicon matches and metrics around that. These are used throughout the paper
+
+/src/utils/typetoken.py also generates the type token table in section 3.1
 
 
 
