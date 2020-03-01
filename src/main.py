@@ -66,9 +66,9 @@ parser.add_argument('--embedding_model', type=str, default='SKIPGRAM',
                     help='type of fasttext embedding model (SKIPGRAM, CBOW)')
 parser.add_argument('--fasttext_save', type=str, default='embeddings',
                     help='path of the fasttext model')
-parser.add_argument('--fasttext_maxn', type=input, default=6,
+parser.add_argument('--fasttext_maxn', type=int, default=6,
                     help='character level n grams to use')
-parser.add_argument('--fasttext_epochs', type=input, default=5,
+parser.add_argument('--fasttext_epochs', type=int, default=15,
                     help='max loops over dataset to perform')
 
 
@@ -91,8 +91,9 @@ parser.add_argument('--save', type=str, default='model.pt',
                     help='path to save the final model')
 parser.add_argument('--onnx-export', type=str, default='',
                     help='path to export the final model in onnx format')
+print("???")
 args = parser.parse_args()
-
+print(args)
 # Set the random seed manually for reproducibility.
 torch.manual_seed(args.seed)
 if torch.cuda.is_available():

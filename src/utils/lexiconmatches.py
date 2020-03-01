@@ -6,7 +6,7 @@ from data import Corpus, Panlex
 
 if __name__ == "__main__":
     corpus = Corpus(sys.argv[1])
-    lexicon = Panlex(sys.argv[2], acceptable_dist=int(sys.argv[3]), panlex_swap_gk=True)
+    lexicon = Panlex(sys.argv[2], acceptable_dist=int(sys.argv[3]), panlex_swap_gk=False)
     res = []
 
     matches = 0
@@ -16,7 +16,7 @@ if __name__ == "__main__":
 
     for word in corpus.dictionary.word2idx.keys():
         inserted = False
-        if corpus.dictionary.word2freq[word] >= 5:
+        if corpus.dictionary.word2freq[word] >= 100:
             big += 1
 
         eng = lexicon.get(target=word)

@@ -101,6 +101,7 @@ class RNNModel(nn.Module):
                 else:
                     print('Starting initializing embeddings')
                     self.init_embeddings_weights(vocab)
+
                     print('Finished initializing embeddings')
 
         del self.embedding_model
@@ -168,6 +169,7 @@ class RNNModel(nn.Module):
         self.encoder.weight.data[idx] = x
 
     def init_embeddings_weights(self, vocab, embeddings=None):
+
         for i, word in enumerate(vocab.idx2word):
             if embeddings:
                 self.init_vec(i, embeddings.get_word_vector(word))
