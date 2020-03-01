@@ -68,7 +68,7 @@ FastText, Kenlm, and XlingualEmb are all compiled to work on my machine, so you 
 
 To build FastText and install the python package, follow the instructions in [this repository](https://github.com/facebookresearch/fastText). This is needed to make FastText embedding and to run the models file
 
-To compile kenlm, follow the instructions in [this repository](https://github.com/kpu/kenlm). It's a bit finiky, so you might have to double check your c++ compiler install and stuff like that (e.g. you might have to update it or install extra libraries). This is needed to make n-gram KLM baselines
+To compile kenlm, follow the instructions in [this repository](https://github.com/kpu/kenlm). This is needed to make n-gram KLM baselines.
 
 To make Duong et al. style CLWEs you need the XlingualEmb package, compile and build [this repository](https://github.com/longdt219/XlingualEmb).
 
@@ -93,7 +93,13 @@ python src/data/transform_data.py data/raw/micmac/test.txt > data/transformed/mi
 #### Lexicon Data
 Lexicons are used to make CLWEs
 
-TODO: fix the script that generates it. Contact me if you need the file.
+- Download the [Panlex database](https://db.panlex.org/). `panlex_lite-20190101.zip` was used for this research.
+- You can connect to the database directly by opening sqllite (`> sqlite3`) and executing (`.open <file_path>/panlex_lite/db.sqlite`). The readme in the same folder describes the schema.
+- `src/data/panlex_buildlexicon.sql` contains the raw sql query to get the expressions
+- `src/data/make_panlex.py` is a script that builds lexicons with the database
+- This command will build the English-Mi'kmaq lexicon (It takes a while to run):
+  - python src/data/make_panlex.py eng-000 mic-000 "<file_path>/panlex_lite/db.sqlite > data/lexicon/eng-mic.txt"
+
 
 #### Duong et al. Data
 TODO
