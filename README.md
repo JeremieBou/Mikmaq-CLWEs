@@ -9,7 +9,7 @@ The code was originally forked from the [Pytorch word-level language model examp
 
 Lead researcher: Jeremie Boudreau (@JeremieBou) - contact me concerning the code in the repository
 
-Other researchers: Akankshya Patra, Paul Cook (@cpaulcook)
+Other researchers: Akankshya Patra, Ashima Suvarna (@asuvarna31), Paul Cook (@cpaulcook)
 
 ## File Structure
 
