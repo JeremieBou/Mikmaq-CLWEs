@@ -286,7 +286,7 @@ python src/main.py \
 ```
 
 #### Direct CLWE
-*I need to put instructions for how to make Lexicons with PanLex first. The issue is that the script currently doesn't work, so I'll need to fix that first.*
+
 
 **Direct**
 ```
